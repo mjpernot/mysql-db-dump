@@ -30,8 +30,8 @@
         NOTE 2:  -A, -B, and -D are XOR arguments.
 
     Notes:
-        Database configuration file format (mysql_{host}.py):
-            # Configuration file for {Database Name/Server}
+        Database configuration file format (mysql_cfg.py.TEMPLATE):
+            # Configuration file for Database
             user = "root"
             passwd = "ROOT_PASSWORD"
             host = "IP_ADDRESS"
@@ -42,13 +42,19 @@
             sid = "SERVER_ID"
             extra_def_file = "DIRECTORY_PATH/myextra.cfg"
 
-        NOTE:  Include the cfg_file even if running remotely as the file will
+        NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
+
+        NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
+            the command line.  To suppress this warning, will require the use
+            of the --defaults-extra-file option (i.e. extra_def_file) in the
+            database configuration file.  See below for the defaults-extra-file
+            format.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (filename.cfg):
+        Defaults Extra File format (mysql.cfg.TEMPLATE):
             [client]
             password="ROOT_PASSWORD"
             socket="DIRECTORY_PATH/mysql.sock"
@@ -74,7 +80,6 @@ import mysql_lib.mysql_class as mysql_class
 import mysql_lib.mysql_libs as mysql_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -92,7 +97,7 @@ def help_message():
     print(__doc__)
 
 
-def crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list):
+def crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  crt_dump_cmd
 
@@ -107,9 +112,8 @@ def crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list):
 
     """
 
-    dump_args = mysql_libs.crt_cmd(SERVER, arg_parser.arg_set_path(args_array,
-                                                                   "-p") +
-                                   "mysqldump")
+    dump_args = mysql_libs.crt_cmd(
+        SERVER, arg_parser.arg_set_path(args_array, "-p") + "mysqldump")
 
     # Add arguments to dump command.
     for arg in opt_arg_list:
@@ -129,8 +133,6 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
         (input) dump_cmd -> Database dump command line.
         (input) compress -> Compression flag.
         (input) dmp_file -> Dump file and path name.
-        (input) **kwargs:
-            None
 
     """
 
@@ -140,7 +142,7 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
         gen_libs.compress(dmp_file)
 
 
-def dump_db(dump_cmd, db_list, compress, dmp_path):
+def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     """Function:  dump_db
 
@@ -156,11 +158,9 @@ def dump_db(dump_cmd, db_list, compress, dmp_path):
     """
 
     if db_list:
-
         for db in db_list:
             dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=db)
             dmp_file = gen_libs.crt_file_time(db, dmp_path, ".sql")
-
             dump_run(dump_cmd, dmp_file, compress)
 
             # Remove database name from command.
@@ -168,7 +168,6 @@ def dump_db(dump_cmd, db_list, compress, dmp_path):
 
     elif "--all-databases" in dump_cmd:
         dmp_file = gen_libs.crt_file_time("All_Databases", dmp_path, ".sql")
-
         dump_run(dump_cmd, dmp_file, compress)
 
     else:
@@ -186,8 +185,6 @@ def set_db_list(SERVER, args_array, **kwargs):
         (input) SERVER -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (output) -> Database list.
-        (input) **kwargs:
-            multi_val -> List of options that may have multiple values.
 
     """
 
@@ -223,19 +220,14 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         (input) args_array -> Array of command line options and values.
         (input) opt_arg_list -> List of commands to add to cmd line.
         (input) opt_dump_list -> Dictionary of additional options.
-        (input) **kwargs:
-            multi_val -> List of options that may have multiple values.
 
     """
 
     SERVER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-
     SERVER.connect()
     SERVER.set_srv_gtid()
-
     dump_cmd = crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list)
-
     db_list = set_db_list(SERVER, args_array, **kwargs)
 
     # Remove the -r option if database is not GTID enabled.
@@ -253,7 +245,6 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         dmp_path = args_array["-o"] + "/"
 
     dump_db(dump_cmd, db_list, compress, dmp_path)
-
     cmds_gen.disconnect([SERVER])
 
 
@@ -281,6 +272,7 @@ def main():
 
     dir_chk_list = ["-o", "-d", "-p"]
     dir_crt_list = ["-o"]
+
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
     opt_dump_list = {"-s": "--single-transaction",
