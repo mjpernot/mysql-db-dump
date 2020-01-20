@@ -9,6 +9,7 @@ coverage erase
 echo ""
 echo "Running unit test modules in conjunction with coverage"
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/crt_dump_cmd.py
+coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/dump_db.py
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/dump_run.py
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/help_message.py
 
