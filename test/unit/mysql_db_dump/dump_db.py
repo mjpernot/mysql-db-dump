@@ -65,7 +65,7 @@ class UnitTest(unittest.TestCase):
         self.db_list = []
         self.db_list2 = ["db1"]
         self.db_list3 = ["db1", "db2"]
-        self.dmp_path = "/dir/path/dump_file.dmp"
+        self.dmp_file = "/dir/path/dump_file.dmp"
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
     def test_db_list2(self):
