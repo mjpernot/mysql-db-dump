@@ -62,6 +62,10 @@ class UnitTest(unittest.TestCase):
         self.dump_cmd = []
         self.dmp_file = "/dir/path/dump_file.dmp"
 
+    @mock.patch("mysql_db_dump.gen_libs.compress",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.run_prog",
+                mock.Mock(return_value=True))
     def test_compress_true(self):
 
         """Function:  test_compress_true
@@ -75,6 +79,8 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_db_dump.dump_run(self.dump_cmd, self.dmp_file,
                                                 True))
 
+    @mock.patch("mysql_db_dump.cmds_gen.run_prog",
+                mock.Mock(return_value=True))
     def test_compress_false(self):
 
         """Function:  test_compress_false
@@ -88,6 +94,8 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_db_dump.dump_run(self.dump_cmd, self.dmp_file,
                                                 False))
 
+    @mock.patch("mysql_db_dump.cmds_gen.run_prog",
+                mock.Mock(return_value=True))
     def test_dump_run(self):
 
         """Function:  test_dump_run
