@@ -166,6 +166,7 @@ test/unit/mysql_db_dump/dump_run.py
 test/unit/mysql_db_dump/help_message.py
 test/unit/mysql_db_dump/main.py
 test/unit/mysql_db_dump/run_program.py
+test/unit/mysql_db_dump/set_db_list.py
 ```
 
 ### All unit testing

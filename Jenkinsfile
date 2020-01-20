@@ -26,6 +26,7 @@ pipeline {
                 ./test/unit/mysql_db_dump/crt_dump_cmd.py
                 ./test/unit/mysql_db_dump/dump_run.py
                 ./test/unit/mysql_db_dump/help_message.py
+                ./test/unit/mysql_db_dump/set_db_list.py
                 deactivate
                 rm -rf test_env
                 """
