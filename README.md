@@ -160,6 +160,7 @@ pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host
 ### Unit testing:
 ```
 cd {Python_Project}/mysql-db-dump
+test/unit/mysql_db_dump/crt_dump_cmd.py
 test/unit/mysql_db_dump/dump_run.py
 test/unit/mysql_db_dump/help_message.py
 test/unit/mysql_db_dump/main.py
