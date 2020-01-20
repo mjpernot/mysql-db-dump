@@ -43,6 +43,9 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_db_list2 -> Test with list of databases.
+        test_db_list -> Test with list of databases.
+        test_all_dbs -> Test with all databases.
         test_dump_db -> Test with only default arguments passed.
 
     """
@@ -57,12 +60,55 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.dump_cmd = []
+        self.dump_cmd = ["dump_command", "params"]
+        self.dump_cmd2 = ["--all-databases"]
         self.db_list = []
+        self.db_list2 = ["db1"]
+        self.db_list3 = ["db1", "db2"]
         self.dmp_path = "/dir/path/dump_file.dmp"
 
-    @mock.patch("mysql_db_dump.cmds_gen.run_prog",
-                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    def test_db_list2(self):
+
+        """Function:  test_db_list2
+
+        Description:  Test with list of databases.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd, self.db_list3,
+                                               False, self.dmp_file))
+
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    def test_db_list(self):
+
+        """Function:  test_db_list
+
+        Description:  Test with list of databases.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd, self.db_list2,
+                                               False, self.dmp_file))
+
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    def test_all_dbs(self):
+
+        """Function:  test_all_dbs
+
+        Description:  Test with all databases.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd2, self.db_list,
+                                               False, self.dmp_file))
+
     def test_dump_db(self):
 
         """Function:  test_dump_db
