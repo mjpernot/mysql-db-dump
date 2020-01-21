@@ -12,6 +12,7 @@ coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/crt_dump_cmd.py
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/dump_db.py
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/dump_run.py
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/help_message.py
+coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/run_program.py
 coverage run -a --source=mysql_db_dump test/unit/mysql_db_dump/set_db_list.py
 
 echo ""
