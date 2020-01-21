@@ -113,11 +113,11 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.self.dump_cmd = []
         self.db_list = []
-        self.args_array = {}
-        self.args_array2 = {"-o": "/dir/path"}
-        self.args_array3 = {"-z": True}
-        self.args_array4 = {"-z": False}
-        self.args_array5 = {"-r": True}
+        self.args_array = {"-c": "config", "-d": "/dir"}
+        self.args_array2 = {"-c": "config", "-d": "/dir", "-o": "/dir/path"}
+        self.args_array3 = {"-c": "config", "-d": "/dir", "-z": True}
+        self.args_array4 = {"-c": "config", "-d": "/dir", "-z": False}
+        self.args_array5 = {"-c": "config", "-d": "/dir", "-r": True}
         self.opt_arg_list = ["--ignore-table=mysql.event"]
         self.opt_dump_list = {
             "-s": "--single-transaction",
