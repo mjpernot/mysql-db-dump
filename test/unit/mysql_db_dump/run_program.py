@@ -91,6 +91,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_o_option -> Test with -o option.
         test_run_program -> Test run_program with default settings.
 
     """
@@ -109,12 +110,37 @@ class UnitTest(unittest.TestCase):
         self.self.dump_cmd = []
         self.db_list = []
         self.args_array = {}
+        self.args_array2 = {"-o": "/dir/path"}
         self.opt_arg_list = ["--ignore-table=mysql.event"]
         self.opt_dump_list = {
             "-s": "--single-transaction",
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
             "-r": "--set-gtid-purged=OFF"}
 
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_o_option(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_o_option
+
+        Description:  Test with -o option.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_db_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(self.args_array2,
+                                                   self.opt_arg_list,
+                                                   self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
