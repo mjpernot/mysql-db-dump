@@ -108,7 +108,13 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.self.dump_cmd = []
         self.db_list = []
-        self.args_array = {"-m": True, "-d": True, "-c": True, "-S": True}
+        self.args_array = {}
+        self.opt_arg_list = ["--ignore-table=mysql.event"]
+        self.opt_dump_list = {
+            "-s": "--single-transaction",
+            "-D": ["--all-databases", "--triggers", "--routines", "--events"],
+            "-r": "--set-gtid-purged=OFF"}
+
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
@@ -131,7 +137,8 @@ class UnitTest(unittest.TestCase):
         mock_db_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array,
-                                                self.func_dict))
+                                                   self.opt_arg_list,
+                                                   self.opt_dump_list))
 
 
 if __name__ == "__main__":
