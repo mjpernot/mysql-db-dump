@@ -91,6 +91,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_r_option2 -> Test with -r option and GTID set to False.
+        test_r_option -> Test with -r option and GTID set to True.
         test_z_option2 -> Test with -z option set to False.
         test_z_option -> Test with -z option set to True.
         test_o_option -> Test with -o option.
@@ -115,11 +117,62 @@ class UnitTest(unittest.TestCase):
         self.args_array2 = {"-o": "/dir/path"}
         self.args_array3 = {"-z": True}
         self.args_array4 = {"-z": False}
+        self.args_array5 = {"-r": True}
         self.opt_arg_list = ["--ignore-table=mysql.event"]
         self.opt_dump_list = {
             "-s": "--single-transaction",
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
             "-r": "--set-gtid-purged=OFF"}
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_r_option2(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_r_option2
+
+        Description:  Test with -r option and GTID set to False.
+
+        Arguments:
+
+        """
+
+        self.server.gtid_mode = False
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_db_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(self.args_array5,
+                                                   self.opt_arg_list,
+                                                   self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_r_option(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_r_option
+
+        Description:  Test with -r option and GTID set to True.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_db_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(self.args_array5,
+                                                   self.opt_arg_list,
+                                                   self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
