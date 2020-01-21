@@ -91,6 +91,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_r_option_miss -> Test with -r option value not in command list.
         test_r_option2 -> Test with -r option and GTID set to False.
         test_r_option -> Test with -r option and GTID set to True.
         test_z_option2 -> Test with -z option set to False.
@@ -111,7 +112,8 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
-        self.self.dump_cmd = []
+        self.dump_cmd = ["dump_command", "--set-gtid-purged=OFF"]
+        self.dump_cmd2 = ["dump_command"]
         self.db_list = []
         self.args_array = {"-c": "config", "-d": "/dir"}
         self.args_array2 = {"-c": "config", "-d": "/dir", "-o": "/dir/path"}
@@ -124,10 +126,37 @@ class UnitTest(unittest.TestCase):
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
             "-r": "--set-gtid-purged=OFF"}
 
+    @unittest.skip("Bug:  If -r option value not in command list.")
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_r_option_miss(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_r_option_miss
+
+        Description:  Test with -r option value not in command list.
+
+        Arguments:
+
+        """
+
+        self.server.gtid_mode = False
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd2
+        mock_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(self.args_array5,
+                                                   self.opt_arg_list,
+                                                   self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_r_option2(self, mock_inst, mock_cmd, mock_list):
@@ -144,7 +173,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
-        mock_db_list.return_value = self.db_list
+        mock_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array5,
                                                    self.opt_arg_list,
@@ -153,7 +182,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_r_option(self, mock_inst, mock_cmd, mock_list):
@@ -168,7 +197,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
-        mock_db_list.return_value = self.db_list
+        mock_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array5,
                                                    self.opt_arg_list,
@@ -177,7 +206,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_z_option2(self, mock_inst, mock_cmd, mock_list):
@@ -192,7 +221,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
-        mock_db_list.return_value = self.db_list
+        mock_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array4,
                                                    self.opt_arg_list,
@@ -201,7 +230,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_z_option(self, mock_inst, mock_cmd, mock_list):
@@ -216,7 +245,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
-        mock_db_list.return_value = self.db_list
+        mock_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array3,
                                                    self.opt_arg_list,
@@ -225,7 +254,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_o_option(self, mock_inst, mock_cmd, mock_list):
@@ -240,7 +269,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
-        mock_db_list.return_value = self.db_list
+        mock_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array2,
                                                    self.opt_arg_list,
@@ -249,7 +278,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_run_program(self, mock_inst, mock_cmd, mock_list):
@@ -264,7 +293,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
-        mock_db_list.return_value = self.db_list
+        mock_list.return_value = self.db_list
 
         self.assertFalse(mysql_db_dump.run_program(self.args_array,
                                                    self.opt_arg_list,
