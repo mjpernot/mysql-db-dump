@@ -136,6 +136,7 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
 
     """
 
+    dump_cmd = list(dump_cmd)
     cmds_gen.run_prog(dump_cmd, ofile=dmp_file)
 
     if compress:
