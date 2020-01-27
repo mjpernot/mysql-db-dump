@@ -223,6 +223,9 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """
 
+    args_array = dict(args_array)
+    opt_dump_list = dict(opt_dump_list)
+    opt_arg_list = list(opt_arg_list)
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     server.connect()
