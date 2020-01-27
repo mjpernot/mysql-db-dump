@@ -188,6 +188,7 @@ def set_db_list(server, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
