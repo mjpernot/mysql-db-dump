@@ -157,6 +157,9 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     """
 
+    dump_cmd = list(dump_cmd)
+    db_list = list(db_list)
+
     if db_list:
         for db in db_list:
             dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=db)
