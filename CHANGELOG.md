@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.0] - 2020-01-17
+### Fixed
+- run_program:  Fixed problem with mutable default arguments issue.
+
 ### Changed
 - crt_dump_cmd:  Changed variable name to standard convention.
 - set_db_list:  Changed variable name to standard convention.
