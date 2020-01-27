@@ -8,7 +8,8 @@
 
     Usage:
         mysql_db_dump.py -c file -d path {-B db_name [db_name ...] |
-            -A | -D} [-o name | -p path | -s | -z | -r] [-v | -h]
+            -A | -D} [-o name | -p path | -s | -z | -r] [-y flavor_id]
+            [-v | -h]
 
     Arguments:
         -B databases => Database names, space delimited.
@@ -22,7 +23,8 @@
             in the $PATH variable.)
         -s => Run dump as a single transaction.
         -r => Remove GTID entries from dump file.
-        -z => Compress database dump files
+        -z => Compress database dump files.
+        -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -75,6 +77,7 @@ import sys
 # Local
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
+import lib.gen_class as gen_class
 import lib.cmds_gen as cmds_gen
 import mysql_lib.mysql_class as mysql_class
 import mysql_lib.mysql_libs as mysql_libs
@@ -292,7 +295,7 @@ def main():
                      "-r": "--set-gtid-purged=OFF"}
     opt_multi_list = ["-B"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-B", "-c", "-d", "-o", "-p"]
+    opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y"]
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
 
     # Process argument list from command line.
@@ -304,8 +307,18 @@ def main():
        and not arg_parser.arg_require(args_array, opt_req_list) \
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
                                           dir_crt_list):
-        run_program(args_array, opt_arg_list, opt_dump_list,
-                    multi_val=opt_multi_list)
+
+        try:
+            prog_lock = gen_class.ProgramLock(sys.argv,
+                                              args_array.get("-y", ""))
+            run_program(args_array, opt_arg_list, opt_dump_list,
+                        multi_val=opt_multi_list)
+            del prog_lock
+
+        except gen_class.SingleInstanceException:
+            print("WARNING:  Lock in place for mysql_db_dump with id: %s"
+                  % (args_array.get("-y", "")))
+
 
 
 if __name__ == "__main__":
