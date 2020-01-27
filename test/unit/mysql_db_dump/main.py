@@ -69,7 +69,6 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
 
-    @unittest.skip("Not yet implemented")
     @mock.patch("mysql_db_dump.gen_class.ProgramLock",
                 mock.Mock(side_effect=None))
     @mock.patch("mysql_db_dump.run_program", mock.Mock(return_value=True))
@@ -96,9 +95,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_dump.main())
 
-    @unittest.skip("Not yet implemented")
-    # @mock.patch("mysql_db_dump.gen_class.ProgramLock", mock.Mock(
-    #     side_effect=mysql_db_dump.gen_class.SingleInstanceException))
+    @mock.patch("mysql_db_dump.gen_class.ProgramLock", mock.Mock(
+        side_effect=mysql_db_dump.gen_class.SingleInstanceException))
     @mock.patch("mysql_db_dump.run_program", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.gen_libs.help_func")
     @mock.patch("mysql_db_dump.arg_parser")
@@ -122,7 +120,6 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_dump.main())
 
-    @unittest.skip("Not yet implemented")
     @mock.patch("mysql_db_dump.gen_class.ProgramLock",
                 mock.Mock(side_effect=None))
     @mock.patch("mysql_db_dump.run_program", mock.Mock(return_value=True))
