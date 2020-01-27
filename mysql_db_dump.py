@@ -288,13 +288,13 @@ def main():
     args_array = arg_parser.arg_parse2(sys.argv, opt_val_list,
                                        multi_val=opt_multi_list)
 
-    if not gen_libs.help_func(args_array, __version__, help_message):
-        if arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-           and not arg_parser.arg_require(args_array, opt_req_list) \
-           and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
-                                              dir_crt_list):
-            run_program(args_array, opt_arg_list, opt_dump_list,
-                        multi_val=opt_multi_list)
+    if not gen_libs.help_func(args_array, __version__, help_message) \
+       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
+       and not arg_parser.arg_require(args_array, opt_req_list) \
+       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
+                                          dir_crt_list):
+        run_program(args_array, opt_arg_list, opt_dump_list,
+                    multi_val=opt_multi_list)
 
 
 if __name__ == "__main__":
