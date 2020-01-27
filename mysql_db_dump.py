@@ -223,15 +223,15 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """
 
-    SERVER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
+    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    SERVER.connect()
-    SERVER.set_srv_gtid()
-    dump_cmd = crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list)
-    db_list = set_db_list(SERVER, args_array, **kwargs)
+    server.connect()
+    server.set_srv_gtid()
+    dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list)
+    db_list = set_db_list(server, args_array, **kwargs)
 
     # Remove the -r option if database is not GTID enabled.
-    if "-r" in args_array and not SERVER.gtid_mode:
+    if "-r" in args_array and not server.gtid_mode:
         dump_cmd.remove(opt_dump_list["-r"])
 
     compress = False
@@ -245,7 +245,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         dmp_path = args_array["-o"] + "/"
 
     dump_db(dump_cmd, db_list, compress, dmp_path)
-    cmds_gen.disconnect([SERVER])
+    cmds_gen.disconnect([server])
 
 
 def main():
