@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.0] - 2020-01-17
 ### Changed
+- run_program:  Changed variable name to standard convention.
 - main:  Refactored and streamlined "if" statements.
 - Added \*\*kwargs to those function parameter lists without the keyword argument capability.
 - Documentation updates.
