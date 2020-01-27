@@ -101,7 +101,8 @@ class UnitTest(unittest.TestCase):
         self.results = ['mysqldump', '-u', 'mysql', '-ppswd', '-h',
                         'hostname', '-P', '3306', '--ignore-table=mysql.event']
         self.results2 = ['/opt/local/mysqldump', '-u', 'mysql', '-ppswd', '-h',
-                         'hostname', '-P', '3306', '--ignore-table=mysql.event']
+                         'hostname', '-P', '3306',
+                         '--ignore-table=mysql.event']
         self.results3 = ['/opt/local/mysqldump', '-u', 'mysql', '-ppswd', '-h',
                          'hostname', '-P', '3306']
         self.results4 = ['/opt/local/mysqldump', '-u', 'mysql', '-ppswd', '-h',
@@ -134,7 +135,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_db_dump.crt_dump_cmd(
             self.server, self.args_array, [], self.opt_dump_list),
-                         self.results3)
+            self.results3)
 
     @unittest.skip("Bug: Adds extra slash to directory path.")
     def test_p_option2(self):
@@ -177,7 +178,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(mysql_db_dump.crt_dump_cmd(
             self.server, [], self.opt_arg_list, self.opt_dump_list),
-                         self.results)
+            self.results)
 
 
 if __name__ == "__main__":
