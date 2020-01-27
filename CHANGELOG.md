@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.0] - 2020-01-17
 ### Changed
+- crt_dump_cmd:  Changed variable name to standard convention.
 - set_db_list:  Changed variable name to standard convention.
 - run_program:  Changed variable name to standard convention.
 - main:  Refactored and streamlined "if" statements.
