@@ -174,7 +174,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         print("WARNING:  No databases to dump or missing -D option.")
 
 
-def set_db_list(SERVER, args_array, **kwargs):
+def set_db_list(server, args_array, **kwargs):
 
     """Function:  set_db_list
 
@@ -182,13 +182,13 @@ def set_db_list(SERVER, args_array, **kwargs):
         database is being selected.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (output) -> Database list.
 
     """
 
-    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(SERVER),
+    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
     # Specified databases.
