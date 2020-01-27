@@ -97,14 +97,14 @@ def help_message():
     print(__doc__)
 
 
-def crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list, **kwargs):
+def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  crt_dump_cmd
 
     Description:  Create the database dump command line.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) opt_arg_list -> List of commands to add to cmd line.
         (input) opt_dump_list -> Dictionary of additional options.
@@ -113,7 +113,7 @@ def crt_dump_cmd(SERVER, args_array, opt_arg_list, opt_dump_list, **kwargs):
     """
 
     dump_args = mysql_libs.crt_cmd(
-        SERVER, arg_parser.arg_set_path(args_array, "-p") + "mysqldump")
+        server, arg_parser.arg_set_path(args_array, "-p") + "mysqldump")
 
     # Add arguments to dump command.
     for arg in opt_arg_list:
