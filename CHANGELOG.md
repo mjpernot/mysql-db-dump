@@ -4,6 +4,25 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.0] - 2020-01-17
+### Fixed
+- crt_dump_cmd:  Fixed problem with mutable default arguments issue.
+- dump_run:  Fixed problem with mutable default arguments issue.
+- dump_db:  Fixed problem with mutable default arguments issue.
+- set_db_list:  Fixed problem with mutable default arguments issue.
+- run_program:  Fixed problem with mutable default arguments issue.
+
+### Changed
+- main:  Added program lock functionality to program.
+- main:  Added new option -y to the program.
+- crt_dump_cmd:  Changed variable name to standard convention.
+- set_db_list:  Changed variable name to standard convention.
+- run_program:  Changed variable name to standard convention.
+- main:  Refactored and streamlined "if" statements.
+- Added \*\*kwargs to those function parameter lists without the keyword argument capability.
+- Documentation updates.
+
+
 ## [3.0.1] - 2018-12-06
 ### Changed
 - Documentation updates.
@@ -34,14 +53,14 @@ Breaking Change
 ### Changed
 - Convert program to use local libraries from ./lib directory.
 - Change single quotes to double quotes.
-- Help_Message:  Replace docstring with printing the programs __doc__.
+- Help_Message:  Replace docstring with printing the programs \_\_doc\_\_.
 
 
 ## [2.5.0] - 2016-12-19
 ### Changed
 - Set_Db_List:  Modified -B section to handle multiple databases.  Replaced sys.exit() with empty list.
 - Dump_DB:  Added elif to check for all-databases run and modified else to assume empty database list and there is nothing to dump or missing -D option.
-- Run_Program:  Removed if statement and call Set_Db_List function regardlessly, also added **kwargs to argument list to Set_Db_List call.
+- Run_Program:  Removed if statement and call Set_Db_List function regardlessly, also added \*\*kwargs to argument list to Set_Db_List call.
 - main:  Added opt_multi_list variable.
 - Added option for -B option to have multiple database names and also corrected an error if no option selected the program crashed trying to access the database name under -B option.
 
