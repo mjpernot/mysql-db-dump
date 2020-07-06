@@ -73,6 +73,7 @@
 
 # Standard
 import sys
+import subprocess
 
 # Local
 import lib.arg_parser as arg_parser
@@ -143,7 +144,10 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
     """
 
     dump_cmd = list(dump_cmd)
-    cmds_gen.run_prog(dump_cmd, ofile=dmp_file)
+
+    with open(dmp_file, "wb") as f_name:
+        proc1 = subprocess.Popen(dump_cmd, stdout=f_name, stderr=None)
+        proc1.wait()
 
     if compress:
         gen_libs.compress(dmp_file)
