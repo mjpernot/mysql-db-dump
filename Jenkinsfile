@@ -52,32 +52,32 @@ pipeline {
             steps {
                 script {
                     server = Artifactory.server('Artifactory')
-                    server.credentialsId = 'svc-highpoint-artifactory'
+                    server.credentialsId = 'art-svc-highpoint-dev'
                     uploadSpec = """{
                         "files": [
                             {
                                 "pattern": "./*.py",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-dump/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-dump/"
                             },
                             {
                                 "pattern": "./*.txt",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-dump/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-dump/"
                             },
                             {
                                 "pattern": "./*.md",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-dump/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-dump/"
                             },
                             {
                                 "pattern": "*.TEMPLATE",
                                 "recursive": true,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-dump/config/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-dump/config/"
                             }
                         ]
                     }"""
