@@ -255,13 +255,14 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     if "-r" in args_array and not server.gtid_mode:
         dump_cmd.remove(opt_dump_list["-r"])
 
-    compress = args_array.get('-z', False)
+    compress = args_array.get("-z", False)
     dmp_path = "./"
 
     if "-o" in args_array:
         dmp_path = args_array["-o"] + "/"
 
-    dump_db(dump_cmd, db_list, compress, dmp_path)
+    err_sup = args_array.get("-z", False)
+    dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup)
     cmds_gen.disconnect([server])
 
 
