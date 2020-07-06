@@ -49,6 +49,7 @@ class UnitTest(unittest.TestCase):
         test_db_list -> Test with list of databases.
         test_all_dbs -> Test with all databases.
         test_dump_db -> Test with only default arguments passed.
+        tearDown -> Clean up of unit testing.
 
     """
 
@@ -67,7 +68,7 @@ class UnitTest(unittest.TestCase):
         self.db_list = []
         self.db_list2 = ["db1"]
         self.db_list3 = ["db1", "db2"]
-        self.dmp_file = "/dir/path/dump_file.dmp"
+        self.dmp_path = "./test/unit/mysql_db_dump/tmp/"
         self.err_sup = True
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
@@ -82,7 +83,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_dump.dump_db(
-            self.dump_cmd, self.db_list2, False, self.dmp_file,
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
             err_sup=self.err_sup))
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
@@ -97,7 +98,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_dump.dump_db(
-            self.dump_cmd2, self.db_list, False, self.dmp_file,
+            self.dump_cmd2, self.db_list, False, self.dmp_path,
             err_sup=self.err_sup))
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
@@ -112,7 +113,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd, self.db_list3,
-                                               False, self.dmp_file))
+                                               False, self.dmp_path))
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
     def test_db_list(self):
@@ -126,7 +127,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd, self.db_list2,
-                                               False, self.dmp_file))
+                                               False, self.dmp_path))
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
     def test_all_dbs(self):
@@ -140,7 +141,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd2, self.db_list,
-                                               False, self.dmp_file))
+                                               False, self.dmp_path))
 
     def test_dump_db(self):
 
@@ -154,7 +155,24 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_dump.dump_db(self.dump_cmd, self.db_list,
-                                                   False, self.dmp_file))
+                                                   False, self.dmp_path))
+
+    def tearDown(self):
+
+        """Function:  tearDown
+
+        Description:  Clean up of unit testing.
+
+        Arguments:
+
+        """
+
+        file_list = gen_libs.filename_search(self.dmp_path, "ErrOut.*.log",
+                                             add_path=True)
+
+        for item in file_list:
+            if os.path.isfile(item):
+                os.remove(item)
 
 
 if __name__ == "__main__":
