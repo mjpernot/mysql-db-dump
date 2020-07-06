@@ -80,6 +80,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_error_file -> Test with error file passed.
         test_compress_true -> Test with compression set to True.
         test_compress_false -> Test with compression set to False.
         test_dump_run -> Test with only default arguments passed.
@@ -99,7 +100,24 @@ class UnitTest(unittest.TestCase):
 
         self.dump_cmd = []
         self.dmp_file = "./test/unit/mysql_db_dump/tmp/test_run_prog"
+        self.err_file = "Error File"
         self.subp = SubProcess()
+
+    @mock.patch("mysql_db_dump.subprocess.Popen")
+    def test_error_file(self, mock_subp):
+
+        """Function:  test_error_file
+
+        Description:  Test with error file passed.
+
+        Arguments:
+
+        """
+
+        mock_subp.return_value = self.subp
+
+        self.assertFalse(mysql_db_dump.dump_run(self.dump_cmd, self.dmp_file,
+                                                False, errfile=self.err_file))
 
     @mock.patch("mysql_db_dump.gen_libs.compress",
                 mock.Mock(return_value=True))
