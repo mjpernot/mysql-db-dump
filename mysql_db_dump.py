@@ -143,13 +143,16 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
         (input) dump_cmd -> Database dump command line.
         (input) compress -> Compression flag.
         (input) dmp_file -> Dump file and path name.
+        (input) **kwargs:
+            errfile -> File handler for error file.
 
     """
 
     dump_cmd = list(dump_cmd)
+    e_file = kwargs.get("errfile", None)
 
     with open(dmp_file, "wb") as f_name:
-        proc1 = subprocess.Popen(dump_cmd, stdout=f_name, stderr=None)
+        proc1 = subprocess.Popen(dump_cmd, stdout=f_name, stderr=e_file)
         proc1.wait()
 
     if compress:
@@ -195,6 +198,9 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     else:
         print("WARNING:  No databases to dump or missing -D option.")
+
+    if errfile:
+        errfile.close()
 
 
 def set_db_list(server, args_array, **kwargs):

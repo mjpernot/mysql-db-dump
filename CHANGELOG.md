@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added standard error out redirection -w option.
 
 ### Changed
+- dump_run:  Setup subprocess.Popen with stderr option and pass error file to the option.
 - dump_db:  Set up and open error file if error suppression is passed.
 - run_program: Parse the -w option.
 - run_program: Refactored check on -z option in args_array.
