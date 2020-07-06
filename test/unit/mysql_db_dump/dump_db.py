@@ -43,6 +43,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_db_list_w_option -> Test with -w option with list of databases.
+        test_all_dbs_w_option -> Test with -z option with all databases.
         test_db_list2 -> Test with list of databases.
         test_db_list -> Test with list of databases.
         test_all_dbs -> Test with all databases.
@@ -66,6 +68,37 @@ class UnitTest(unittest.TestCase):
         self.db_list2 = ["db1"]
         self.db_list3 = ["db1", "db2"]
         self.dmp_file = "/dir/path/dump_file.dmp"
+        self.err_sup = True
+
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    def test_db_list_w_option(self):
+
+        """Function:  test_db_list_w_option
+
+        Description:  Test with -w option with list of databases.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_file,
+            err_sup=self.err_sup))
+
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    def test_all_dbs_w_option(self):
+
+        """Function:  test_all_dbs_w_option
+
+        Description:  Test with -z option with all databases.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd2, self.db_list, False, self.dmp_file,
+            err_sup=self.err_sup))
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
     def test_db_list2(self):
