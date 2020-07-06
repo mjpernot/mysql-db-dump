@@ -175,19 +175,23 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     dump_cmd = list(dump_cmd)
     db_list = list(db_list)
+    errfile = None
+
+    if kwargs.get("err_sup", False):
+        errfile = open(gen_libs.crt_file_time("ErrOut", dmp_path, ".log"), "a")
 
     if db_list:
         for db in db_list:
             dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=db)
             dmp_file = gen_libs.crt_file_time(db, dmp_path, ".sql")
-            dump_run(dump_cmd, dmp_file, compress, **kwargs)
+            dump_run(dump_cmd, dmp_file, compress, errfile=errfile)
 
             # Remove database name from command.
             dump_cmd.pop(len(dump_cmd) - 1)
 
     elif "--all-databases" in dump_cmd:
         dmp_file = gen_libs.crt_file_time("All_Databases", dmp_path, ".sql")
-        dump_run(dump_cmd, dmp_file, compress, **kwargs)
+        dump_run(dump_cmd, dmp_file, compress, errfile=errfile)
 
     else:
         print("WARNING:  No databases to dump or missing -D option.")
