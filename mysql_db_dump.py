@@ -263,7 +263,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     if "-o" in args_array:
         dmp_path = args_array["-o"] + "/"
 
-    err_sup = args_array.get("-z", False)
+    err_sup = args_array.get("-w", False)
     dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup)
     cmds_gen.disconnect([server])
 
