@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added standard error out redirection -w option.
 
 ### Changed
+- dump_db:  Passing -w option to dump_run calls.
 - run_program: Parse the -w option.
 - run_program: Refactored check on -z option in args_array.
 - config/mysql.cfg.TEMPLATE:  Changed format of file.

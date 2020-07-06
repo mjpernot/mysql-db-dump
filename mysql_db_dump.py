@@ -168,6 +168,8 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         (input) db_list -> Array of database names.
         (input) compress -> Compression flag.
         (input) dmp_path -> Database dump output directory path.
+        (input) **kwargs:
+            err_sup -> Suppression of standard error to standard out.
 
     """
 
@@ -178,14 +180,14 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         for db in db_list:
             dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=db)
             dmp_file = gen_libs.crt_file_time(db, dmp_path, ".sql")
-            dump_run(dump_cmd, dmp_file, compress)
+            dump_run(dump_cmd, dmp_file, compress, **kwargs)
 
             # Remove database name from command.
             dump_cmd.pop(len(dump_cmd) - 1)
 
     elif "--all-databases" in dump_cmd:
         dmp_file = gen_libs.crt_file_time("All_Databases", dmp_path, ".sql")
-        dump_run(dump_cmd, dmp_file, compress)
+        dump_run(dump_cmd, dmp_file, compress, **kwargs)
 
     else:
         print("WARNING:  No databases to dump or missing -D option.")
