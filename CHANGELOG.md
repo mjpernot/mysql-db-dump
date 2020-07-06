@@ -5,8 +5,13 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.2.0] - 2020-07-06
+### Added
+- Added standard error out redirection -w option.
+
 ### Changed
+- config/mysql.cfg.TEMPLATE:  Changed format of file.
 - dump_run:  Replaced cmds_gen.run_prog with "with open" and "subprocess.Popen" code.
+- Documentation updates.
 
 
 ## [3.1.0] - 2020-01-17

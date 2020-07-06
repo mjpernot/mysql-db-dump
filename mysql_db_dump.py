@@ -3,12 +3,13 @@
 
 """Program:  mysql_db_dump.py
 
-    Description:  The mysql_db_dump program runs the mysqldump program against
-        a MySQL database and dumps one or more databases to files.
+    Description:  Runs the mysqldump program against a MySQL database and dumps
+        one or more databases to file(s).
 
     Usage:
-        mysql_db_dump.py -c file -d path {-B db_name [db_name ...] |
-            -A | -D} [-o name | -p path | -s | -z | -r] [-y flavor_id]
+        mysql_db_dump.py -c file -d path
+            {-B db_name [db_name ...] | -A | -D}
+            [-o /path/name] [-p /path] [-s] [-z] [-r] [-y flavor_id] [-w]
             [-v | -h]
 
     Arguments:
@@ -23,6 +24,8 @@
             in the $PATH variable.)
         -s => Run dump as a single transaction.
         -r => Remove GTID entries from dump file.
+        -w => Redirect standard error out from the database dump command to an
+            error file that will be co-located with the database dump file(s).
         -z => Compress database dump files.
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
@@ -32,21 +35,21 @@
         NOTE 2:  -A, -B, and -D are XOR arguments.
 
     Notes:
-        Database configuration file format (mysql_cfg.py.TEMPLATE):
+        Database configuration file format (config/mysql_cfg.py.TEMPLATE):
             # Configuration file for Database
-            user = "root"
-            passwd = "ROOT_PASSWORD"
-            host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
-            name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
-            cfg_file = "DIRECTORY_PATH/my.cfg"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/myextra.cfg"
+            user = "USER"
+            passwd = "PASSWORD"
+            host = "SERVER_IP"
+            name = "HOST_NAME"
+            sid = SERVER_ID
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            port = 3306
+            cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
+            
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
-
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
             the command line.  To suppress this warning, will require the use
             of the --defaults-extra-file option (i.e. extra_def_file) in the
@@ -56,16 +59,16 @@
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (mysql.cfg.TEMPLATE):
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
-            password="ROOT_PASSWORD"
-            socket="DIRECTORY_PATH/mysql.sock"
+            password="PASSWORD"
+            socket=DIRECTORY_PATH/mysql.sock"
 
         NOTE:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
 
     Example:
-        mysql_db_dump.py -A -c mysql -d config -z -s
+        mysql_db_dump.py -c mysql_cfg -d config -A -o /path/dumps -z -s
 
 """
 
