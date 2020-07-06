@@ -2,7 +2,7 @@
 # Classification (U)
 
 # Description:
-  This program is used to dump a database in a MySQL database to include dumping single and multiple databases, dump multiple databases to individual files or a single all-encompassing file.
+  Used to dump a database in a MySQL database to include dumping single and multiple databases, dump multiple databases to individual files or a single all-encompassing file.
 
 
 ###  This README file is broken down into the following sections:
@@ -21,12 +21,11 @@
   * Dump the database as a single transaction.
   * Compress database dump file.
   * Remove GTID entries from the dump file.
+  * Redirect standard out error to a file and email.
 
 # Prerequisites:
 
   * List of Linux packages that need to be installed on the server.
-    - python-libs
-    - python-devel
     - git
     - python-pip
 
@@ -70,37 +69,34 @@ pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host
   * Replace **{Python_Project}** with the baseline path of the python program.
 
 Create MySQL configuration file.
+Make the appropriate change to the environment.
+  * Change these entries in the MySQL setup:
+    - user = "USER"
+    - passwd = "PASSWORD"
+    - host = "SERVER_IP"
+    - name = "HOST_NAME"
+    - sid = SERVER_ID
+    - extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+    - cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
+  * Change these entries only if required:
+    - serv_os = "Linux"
+    - port = 3306
 
 ```
 cd config
 cp mysql_cfg.py.TEMPLATE mysql_cfg.py
-```
-
-Make the appropriate change to the environment.
-  * Change these entries in the MySQL setup:
-    - passwd = "ROOT_PASSWORD"
-    - host = "SERVER_IP"
-    - name = "HOST_NAME"
-    - sid = SERVER_ID
-    - extra_def_file = "{Python_Project}/config/mysql.cfg"
-
-```
 vim mysql_cfg.py
 chmod 600 mysql_cfg.py
 ```
 
 Create MySQL definition file.
+Make the appropriate change to the environment.
+  * Change these entries in the MySQL definition file:
+    - password="PASSWORD"
+    - socket=DIRECTORY_PATH/mysql.sock
 
 ```
 cp mysql.cfg.TEMPLATE mysql.cfg
-```
-
-Make the appropriate change to the environment.
-  * Change these entries in the MySQL definition file:
-    - password="ROOT_PASSWORD"
-    - socket={BASE_DIR}/mysql/tmp/mysql.sock
-
-```
 vim mysql.cfg
 chmod 600 mysql.cfg
 ```
@@ -118,10 +114,7 @@ chmod 600 mysql.cfg
 
 # Testing:
 
-
 # Unit Testing:
-
-### Description: Testing consists of unit testing for the functions in the mysql_db_dump.py program.
 
 ### Installation:
 
@@ -153,29 +146,17 @@ pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi
 pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
 ```
 
-
-# Unit test runs for mysql_db_dump.py:
+### Testing:
   * Replace **{Python_Project}** with the baseline path of the python program.
 
-### Unit testing:
 ```
 cd {Python_Project}/mysql-db-dump
-test/unit/mysql_db_dump/crt_dump_cmd.py
-test/unit/mysql_db_dump/dump_db.py
-test/unit/mysql_db_dump/dump_run.py
-test/unit/mysql_db_dump/help_message.py
-test/unit/mysql_db_dump/main.py
-test/unit/mysql_db_dump/run_program.py
-test/unit/mysql_db_dump/set_db_list.py
-```
-
-### All unit testing
-```
 test/unit/mysql_db_dump/unit_test_run.sh
 ```
 
-### Code coverage program
+### Code coverage:
 ```
+cd {Python_Project}/mysql-db-dump
 test/unit/mysql_db_dump/code_coverage.sh
 ```
 
