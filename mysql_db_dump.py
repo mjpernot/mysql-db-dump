@@ -225,8 +225,8 @@ def set_db_list(server, args_array, **kwargs):
     if "-B" in args_array:
 
         # Difference of -B databases to database list.
-        for db in set(args_array["-B"]) - set(db_list):
-            print("Warning: Database(%s) does not exist." % (db))
+        for item in set(args_array["-B"]) - set(db_list):
+            print("Warning: Database(%s) does not exist." % (item))
 
         # Intersect of -B databases to database list.
         return list(set(args_array["-B"]) & set(db_list))
