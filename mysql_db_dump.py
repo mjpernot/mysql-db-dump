@@ -293,6 +293,7 @@ def main():
         dir_chk_list -> contains options which will be directories.
         dir_crt_list -> contain options that require directory to be created.
         opt_arg_list -> contains arguments to add to command line by default.
+        opt_con_req_dict -> contains options requiring other options.
         opt_dump_list -> contains optional arguments to mysqldump.
         opt_multi_list -> contains the options that will have multiple values.
         opt_req_list -> contains the options that are required for the program.
@@ -310,13 +311,14 @@ def main():
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
+    opt_con_req_dict = {"-t": ["-e"]}
     opt_dump_list = {"-s": "--single-transaction",
                      "-D": ["--all-databases", "--triggers", "--routines",
                             "--events"],
                      "-r": "--set-gtid-purged=OFF"}
-    opt_multi_list = ["-B"]
+    opt_multi_list = ["-B", "-e", "-t"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y"]
+    opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y", "-e", "-t"]
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
 
     # Process argument list from command line.
@@ -327,7 +329,8 @@ def main():
        and not arg_parser.arg_require(args_array, opt_req_list) \
        and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
-                                          dir_crt_list):
+                                          dir_crt_list) \
+       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict):
 
         try:
             prog_lock = gen_class.ProgramLock(cmdline.argv,
