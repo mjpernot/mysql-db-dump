@@ -91,6 +91,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_multiple_options2 -> Test with multiple options passed 2.
+        test_multiple_options -> Test with multiple options passed.
         test_no_email -> Test with no email configured.
         test_email_subj -> Test with subject line passed.
         test_email_no_subj -> Test with no subject line passed.
@@ -131,11 +133,61 @@ class UnitTest(unittest.TestCase):
         self.args_array7 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"]}
         self.args_array8 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
                             "t": ["Subject", "Line"]}
+        self.args_array9 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
+                            "t": ["Subject", "Line"], "-z": True}
+        self.args_array10 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
+                             "t": ["Subject", "Line"], "-z": True, "-w": True}
         self.opt_arg_list = ["--ignore-table=mysql.event"]
         self.opt_dump_list = {
             "-s": "--single-transaction",
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
             "-r": "--set-gtid-purged=OFF"}
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_multiple_options2(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_multiple_options2
+
+        Description:  Test with multiple options passed 2.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(
+            self.args_array10, self.opt_arg_list, self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_multiple_options(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_multiple_options
+
+        Description:  Test with multiple options passed.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(
+            self.args_array9, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
