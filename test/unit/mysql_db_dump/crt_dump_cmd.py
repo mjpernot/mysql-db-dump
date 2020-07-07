@@ -131,9 +131,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, self.args_array, [], self.opt_dump_list),
-                         self.results3)
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(self.server, self.args_array, [],
+                                       self.opt_dump_list), self.results3)
 
     @unittest.skip("Bug: Adds extra slash to directory path.")
     def test_p_option2(self):
@@ -174,9 +174,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, [], self.opt_arg_list, self.opt_dump_list),
-                         self.results)
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(self.server, [], self.opt_arg_list,
+                                       self.opt_dump_list), self.results)
 
 
 if __name__ == "__main__":
