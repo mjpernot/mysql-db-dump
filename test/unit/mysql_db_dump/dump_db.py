@@ -35,6 +35,57 @@ import version
 __version__ = version.__version__
 
 
+class Mail(object):
+
+    """Class:  Mail
+
+    Description:  Class stub holder for gen_class.Mail class.
+
+    Methods:
+        __init__ -> Class initialization.
+        add_2_msg -> Stub method holder for Mail.add_2_msg.
+        send_mail -> Stub method holder for Mail.send_mail.
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        pass
+
+    def add_2_msg(self, data):
+
+        """Method:  add_2_msg
+
+        Description:  Stub method holder for Mail.add_2_msg.
+
+        Arguments:
+            (input) data -> Message line to add to email body.
+
+        """
+
+        return True
+
+    def send_mail(self):
+
+        """Method:  send_mail
+
+        Description:  Stub method holder for Mail.send_mail.
+
+        Arguments:
+
+        """
+
+        return True
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -43,6 +94,10 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_email_single_line -> Test with email with single line.
+        test_email_multiple_lines -> Test with email with multiple lines.
+        test_email_empty -> Test with empty file.
+        test_email -> Test with email option.
         test_db_list_w_option -> Test with -w option with list of databases.
         test_all_dbs_w_option -> Test with -z option with all databases.
         test_db_list2 -> Test with list of databases.
@@ -63,6 +118,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.mail = Mail()
         self.dump_cmd = ["dump_command", "params"]
         self.dump_cmd2 = ["--all-databases"]
         self.db_list = []
@@ -70,6 +126,88 @@ class UnitTest(unittest.TestCase):
         self.db_list3 = ["db1", "db2"]
         self.dmp_path = "./test/unit/mysql_db_dump/tmp/"
         self.err_sup = True
+        self.filelist = ["Line 1", "Line 2"]
+        self.filelist2 = ["Line 1"]
+
+    @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.file_2_list")
+    def test_email_single_line(self, mock_list):
+
+        """Function:  test_email_single_line
+
+        Description:  Test with email with single line.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = self.filelist2
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
+            err_sup=self.err_sup, mail=self.mail))
+
+    @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.file_2_list")
+    def test_email_multiple_lines(self, mock_list):
+
+        """Function:  test_email_multiple_lines
+
+        Description:  Test with email with multiple lines.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = self.filelist
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
+            err_sup=self.err_sup, mail=self.mail))
+
+    @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.file_2_list")
+    def test_email_empty(self, mock_list):
+
+        """Function:  test_email_empty
+
+        Description:  Test with empty file.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = self.filelist
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
+            err_sup=self.err_sup, mail=self.mail))
+
+    @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.file_2_list")
+    def test_email(self, mock_list):
+
+        """Function:  test_email
+
+        Description:  Test with email option.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = self.filelist
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
+            err_sup=self.err_sup, mail=self.mail))
 
     @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
     def test_db_list_w_option(self):
