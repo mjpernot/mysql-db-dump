@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added standard error out redirection -w option.
 
 ### Changed
+- dump_db:  Add email capability for dumps error file.
 - run_program:  Setup and configured email.
 - main:  Added -e and -t options to parsing for email capability.
 - set_db_list:  Changed variable to standard naming convention.

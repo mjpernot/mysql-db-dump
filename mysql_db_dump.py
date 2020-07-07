@@ -178,6 +178,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         (input) dmp_path -> Database dump output directory path.
         (input) **kwargs:
             err_sup -> Suppression of standard error to standard out.
+            mail -> Email class instance.
 
     """
 
@@ -186,7 +187,8 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
     errfile = None
 
     if kwargs.get("err_sup", False):
-        errfile = open(gen_libs.crt_file_time("ErrOut", dmp_path, ".log"), "a")
+        efile = gen_libs.crt_file_time("ErrOut", dmp_path, ".log")
+        errfile = open(efile, "a")
 
     if db_list:
         for item in db_list:
@@ -206,6 +208,14 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     if errfile:
         errfile.close()
+        mail = kwargs.get("mail", None)
+
+        if mail and not gen_libs.is_empty_file(efile):
+
+            for line in gen_libs.file_2_list(efile):
+                mail.add_2_msg(line)
+
+            mail.send_mail()
 
 
 def set_db_list(server, args_array, **kwargs):
@@ -261,7 +271,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
-    email = None
+    mail = None
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     server.connect()
@@ -283,11 +293,11 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         dtg = datetime.datetime.strftime(datetime.datetime.now(),
                                          "%Y%m%d_%H%M%S")
         subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
-        email = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+        mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
 
     err_sup = args_array.get("-w", False)
     dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-            email=email)
+            mail=mail)
     cmds_gen.disconnect([server])
 
 
