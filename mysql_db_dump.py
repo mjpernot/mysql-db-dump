@@ -10,6 +10,7 @@
         mysql_db_dump.py -c file -d path
             {-B db_name [db_name ...] | -A | -D}
             [-o /path/name] [-p /path] [-s] [-z] [-r] [-y flavor_id] [-w]
+            [-e email {email2 email3 ...} {-t subject_line}]
             [-v | -h]
 
     Arguments:
@@ -26,6 +27,9 @@
         -r => Remove GTID entries from dump file.
         -w => Redirect standard error out from the database dump command to an
             error file that will be co-located with the database dump file(s).
+        -e email_address(es) => Send output to one or more email addresses.
+        -t subject_line => Subject line of email.
+            Requires -t option.
         -z => Compress database dump files.
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.

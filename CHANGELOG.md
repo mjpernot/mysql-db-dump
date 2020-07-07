@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main: Fixed handling command line arguments from SonarQube scan finding.
 
 ### Added
+- Added email capability for error output.
 - Added standard error out redirection -w option.
 
 ### Changed
