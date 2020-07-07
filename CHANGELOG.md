@@ -12,6 +12,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added standard error out redirection -w option.
 
 ### Changed
+- dump_db:  Changed variable to standard naming convention.
 - main:  Remove non-used argument in run_program call.
 - dump_run:  Setup subprocess.Popen with stderr option and pass error file to the option.
 - dump_db:  Set up and open error file if error suppression is passed.

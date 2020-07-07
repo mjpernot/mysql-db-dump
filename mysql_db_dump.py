@@ -184,9 +184,9 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         errfile = open(gen_libs.crt_file_time("ErrOut", dmp_path, ".log"), "a")
 
     if db_list:
-        for db in db_list:
-            dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=db)
-            dmp_file = gen_libs.crt_file_time(db, dmp_path, ".sql")
+        for item in db_list:
+            dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=item)
+            dmp_file = gen_libs.crt_file_time(item, dmp_path, ".sql")
             dump_run(dump_cmd, dmp_file, compress, errfile=errfile)
 
             # Remove database name from command.
