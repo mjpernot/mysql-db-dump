@@ -80,6 +80,7 @@
 # Standard
 import sys
 import subprocess
+import datetime
 
 # Local
 import lib.arg_parser as arg_parser
@@ -260,6 +261,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
+    email = None
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     server.connect()
@@ -277,8 +279,15 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     if "-o" in args_array:
         dmp_path = args_array["-o"] + "/"
 
+    if args_array.get("-e", False):
+        dtg = datetime.datetime.strftime(datetime.datetime.now(),
+                                         "%Y%m%d_%H%M%S")
+        subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
+        email = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+
     err_sup = args_array.get("-w", False)
-    dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup)
+    dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
+            email=email)
     cmds_gen.disconnect([server])
 
 
