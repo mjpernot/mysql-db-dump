@@ -70,10 +70,12 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_run_program -> Test run_program function.
         test_programlock_id -> Test with ProgramLock with flavor id.
         test_programlock_false -> Test with ProgramLock returns False.
         test_programlock_true -> Test with ProgramLock returns True.
+        test_run_program -> Test run_program function.
+        test_arg_cond_req_or_true -> Test arg_cond_req_or if returns true.
+        test_arg_cond_req_or_false -> Test arg_cond_req_or if returns false.
         test_arg_dir_chk_crt_false -> Test arg_dir_chk_crt if returns false.
         test_arg_dir_chk_crt_true -> Test arg_dir_chk_crt if returns true.
         test_arg_xor_dict_true -> Test arg_xor_dict if returns true.
@@ -103,29 +105,6 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.gen_class.ProgramLock")
     @mock.patch("mysql_db_dump.gen_libs.help_func")
     @mock.patch("mysql_db_dump.arg_parser")
-    def test_run_program(self, mock_arg, mock_help, mock_lock):
-
-        """Function:  test_run_program
-
-        Description:  Test run_program function.
-
-        Arguments:
-
-        """
-
-        mock_lock.return_value = self.proglock
-        mock_arg.arg_parse2.return_value = self.args_array
-        mock_help.return_value = False
-        mock_arg.arg_require.return_value = False
-        mock_arg.arg_xor_dict.return_value = True
-        mock_arg.arg_dir_chk_crt.return_value = False
-
-        self.assertFalse(mysql_db_dump.main())
-
-    @mock.patch("mysql_db_dump.run_program", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.gen_class.ProgramLock")
-    @mock.patch("mysql_db_dump.gen_libs.help_func")
-    @mock.patch("mysql_db_dump.arg_parser")
     def test_programlock_id(self, mock_arg, mock_help, mock_lock):
 
         """Function:  test_programlock_id
@@ -143,6 +122,7 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = True
 
         self.args_array["-y"] = "FlavorID"
 
@@ -170,6 +150,7 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = True
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_dump.main())
@@ -195,10 +176,81 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_require.return_value = False
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = True
 
         self.assertFalse(mysql_db_dump.main())
 
     @mock.patch("mysql_db_dump.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_class.ProgramLock")
+    @mock.patch("mysql_db_dump.gen_libs.help_func")
+    @mock.patch("mysql_db_dump.arg_parser")
+    def test_run_program(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_run_program
+
+        Description:  Test run_program function.
+
+        Arguments:
+
+        """
+
+        mock_lock.return_value = self.proglock
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = True
+
+        self.assertFalse(mysql_db_dump.main())
+
+    @mock.patch("mysql_db_dump.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_class.ProgramLock")
+    @mock.patch("mysql_db_dump.gen_libs.help_func")
+    @mock.patch("mysql_db_dump.arg_parser")
+    def test_arg_cond_req_or_true(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_arg_cond_req_or_true
+
+        Description:  Test arg_cond_req_or if returns true.
+
+        Arguments:
+
+        """
+
+        mock_lock.return_value = self.proglock
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = True
+
+        self.assertFalse(mysql_db_dump.main())
+
+    @mock.patch("mysql_db_dump.gen_class.ProgramLock")
+    @mock.patch("mysql_db_dump.gen_libs.help_func")
+    @mock.patch("mysql_db_dump.arg_parser")
+    def test_arg_cond_req_or_false(self, mock_arg, mock_help, mock_lock):
+
+        """Function:  test_arg_cond_req_or_false
+
+        Description:  Test arg_cond_req_or if returns false.
+
+        Arguments:
+
+        """
+
+        mock_lock.return_value = self.proglock
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_help.return_value = False
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = False
+
+        self.assertFalse(mysql_db_dump.main())
+
     @mock.patch("mysql_db_dump.gen_class.ProgramLock")
     @mock.patch("mysql_db_dump.gen_libs.help_func")
     @mock.patch("mysql_db_dump.arg_parser")
@@ -218,6 +270,7 @@ class UnitTest(unittest.TestCase):
         mock_arg.arg_require.return_value = False
         mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_cond_req_or.return_value = False
 
         self.assertFalse(mysql_db_dump.main())
 
