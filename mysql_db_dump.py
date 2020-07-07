@@ -46,7 +46,6 @@
             serv_os = "Linux"
             port = 3306
             cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
-            
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
