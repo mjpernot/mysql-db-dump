@@ -327,8 +327,7 @@ def main():
         try:
             prog_lock = gen_class.ProgramLock(sys.argv,
                                               args_array.get("-y", ""))
-            run_program(args_array, opt_arg_list, opt_dump_list,
-                        multi_val=opt_multi_list)
+            run_program(args_array, opt_arg_list, opt_dump_list)
             del prog_lock
 
         except gen_class.SingleInstanceException:
