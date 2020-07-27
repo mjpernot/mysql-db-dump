@@ -2,7 +2,7 @@
 # Classification (U)
 
 # Description:
-  Used to dump a database in a MySQL database to include dumping single and multiple databases, dump multiple databases to individual files or a single all-encompassing file.
+  Dump a database in a MySQL database to include dumping single and multiple databases, dump multiple databases to individual files or dump all databases to a single all-encompassing file.
 
 
 ###  This README file is broken down into the following sections:
