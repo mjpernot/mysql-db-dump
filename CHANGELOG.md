@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.2.0] - 2020-07-06
+### Fixed
+- main: Fixed handling command line arguments from SonarQube scan finding.
+
+### Added
+- Added email capability for error output.
+- Added standard error out redirection -w option.
+
+### Changed
+- dump_db:  Add email capability for dumps error file.
+- run_program:  Setup and configured email.
+- main:  Added -e and -t options to parsing for email capability.
+- set_db_list:  Changed variable to standard naming convention.
+- dump_db:  Changed variable to standard naming convention.
+- main:  Remove non-used argument in run_program call.
+- dump_run:  Setup subprocess.Popen with stderr option and pass error file to the option.
+- dump_db:  Set up and open error file if error suppression is passed.
+- run_program: Parse the -w option.
+- run_program: Refactored check on -z option in args_array.
+- config/mysql.cfg.TEMPLATE:  Changed format of file.
+- dump_run:  Replaced cmds_gen.run_prog with "with open" and "subprocess.Popen" code.
+- Documentation updates.
+
+
 ## [3.1.0] - 2020-01-17
 ### Fixed
 - crt_dump_cmd:  Fixed problem with mutable default arguments issue.

@@ -3,12 +3,14 @@
 
 """Program:  mysql_db_dump.py
 
-    Description:  The mysql_db_dump program runs the mysqldump program against
-        a MySQL database and dumps one or more databases to files.
+    Description:  Runs the mysqldump program against a MySQL database and dumps
+        one or more databases to file(s).
 
     Usage:
-        mysql_db_dump.py -c file -d path {-B db_name [db_name ...] |
-            -A | -D} [-o name | -p path | -s | -z | -r] [-y flavor_id]
+        mysql_db_dump.py -c file -d path
+            {-B db_name [db_name ...] | -A | -D}
+            [-o /path/name] [-p /path] [-s] [-z] [-r] [-y flavor_id] [-w]
+            [-e email {email2 email3 ...} {-t subject_line}]
             [-v | -h]
 
     Arguments:
@@ -23,6 +25,11 @@
             in the $PATH variable.)
         -s => Run dump as a single transaction.
         -r => Remove GTID entries from dump file.
+        -w => Redirect standard error out from the database dump command to an
+            error file that will be co-located with the database dump file(s).
+        -e email_address(es) => Send output to one or more email addresses.
+        -t subject_line => Subject line of email.
+            Requires -t option.
         -z => Compress database dump files.
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
@@ -32,21 +39,20 @@
         NOTE 2:  -A, -B, and -D are XOR arguments.
 
     Notes:
-        Database configuration file format (mysql_cfg.py.TEMPLATE):
+        Database configuration file format (config/mysql_cfg.py.TEMPLATE):
             # Configuration file for Database
-            user = "root"
-            passwd = "ROOT_PASSWORD"
-            host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
-            name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
-            cfg_file = "DIRECTORY_PATH/my.cfg"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/myextra.cfg"
+            user = "USER"
+            passwd = "PASSWORD"
+            host = "SERVER_IP"
+            name = "HOST_NAME"
+            sid = SERVER_ID
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            port = 3306
+            cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
-
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
             the command line.  To suppress this warning, will require the use
             of the --defaults-extra-file option (i.e. extra_def_file) in the
@@ -56,16 +62,16 @@
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (mysql.cfg.TEMPLATE):
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE):
             [client]
-            password="ROOT_PASSWORD"
-            socket="DIRECTORY_PATH/mysql.sock"
+            password="PASSWORD"
+            socket=DIRECTORY_PATH/mysql.sock"
 
         NOTE:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
 
     Example:
-        mysql_db_dump.py -A -c mysql -d config -z -s
+        mysql_db_dump.py -c mysql_cfg -d config -A -o /path/dumps -z -s
 
 """
 
@@ -73,6 +79,8 @@
 
 # Standard
 import sys
+import subprocess
+import datetime
 
 # Local
 import lib.arg_parser as arg_parser
@@ -139,11 +147,18 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
         (input) dump_cmd -> Database dump command line.
         (input) compress -> Compression flag.
         (input) dmp_file -> Dump file and path name.
+        (input) **kwargs:
+            errfile -> File handler for error file.
 
     """
 
+    subp = gen_libs.get_inst(subprocess)
     dump_cmd = list(dump_cmd)
-    cmds_gen.run_prog(dump_cmd, ofile=dmp_file)
+    e_file = kwargs.get("errfile", None)
+
+    with open(dmp_file, "wb") as f_name:
+        proc1 = subp.Popen(dump_cmd, stdout=f_name, stderr=e_file)
+        proc1.wait()
 
     if compress:
         gen_libs.compress(dmp_file)
@@ -161,27 +176,46 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         (input) db_list -> Array of database names.
         (input) compress -> Compression flag.
         (input) dmp_path -> Database dump output directory path.
+        (input) **kwargs:
+            err_sup -> Suppression of standard error to standard out.
+            mail -> Email class instance.
 
     """
 
     dump_cmd = list(dump_cmd)
     db_list = list(db_list)
+    errfile = None
+
+    if kwargs.get("err_sup", False):
+        efile = gen_libs.crt_file_time("ErrOut", dmp_path, ".log")
+        errfile = open(efile, "a")
 
     if db_list:
-        for db in db_list:
-            dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=db)
-            dmp_file = gen_libs.crt_file_time(db, dmp_path, ".sql")
-            dump_run(dump_cmd, dmp_file, compress)
+        for item in db_list:
+            dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=item)
+            dmp_file = gen_libs.crt_file_time(item, dmp_path, ".sql")
+            dump_run(dump_cmd, dmp_file, compress, errfile=errfile)
 
             # Remove database name from command.
             dump_cmd.pop(len(dump_cmd) - 1)
 
     elif "--all-databases" in dump_cmd:
         dmp_file = gen_libs.crt_file_time("All_Databases", dmp_path, ".sql")
-        dump_run(dump_cmd, dmp_file, compress)
+        dump_run(dump_cmd, dmp_file, compress, errfile=errfile)
 
     else:
         print("WARNING:  No databases to dump or missing -D option.")
+
+    if errfile:
+        errfile.close()
+        mail = kwargs.get("mail", None)
+
+        if mail and not gen_libs.is_empty_file(efile):
+
+            for line in gen_libs.file_2_list(efile):
+                mail.add_2_msg(line)
+
+            mail.send_mail()
 
 
 def set_db_list(server, args_array, **kwargs):
@@ -206,8 +240,8 @@ def set_db_list(server, args_array, **kwargs):
     if "-B" in args_array:
 
         # Difference of -B databases to database list.
-        for db in set(args_array["-B"]) - set(db_list):
-            print("Warning: Database(%s) does not exist." % (db))
+        for item in set(args_array["-B"]) - set(db_list):
+            print("Warning: Database(%s) does not exist." % (item))
 
         # Intersect of -B databases to database list.
         return list(set(args_array["-B"]) & set(db_list))
@@ -237,6 +271,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
+    mail = None
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     server.connect()
@@ -248,17 +283,21 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     if "-r" in args_array and not server.gtid_mode:
         dump_cmd.remove(opt_dump_list["-r"])
 
-    compress = False
-
-    if "-z" in args_array:
-        compress = True
-
+    compress = args_array.get("-z", False)
     dmp_path = "./"
 
     if "-o" in args_array:
         dmp_path = args_array["-o"] + "/"
 
-    dump_db(dump_cmd, db_list, compress, dmp_path)
+    if args_array.get("-e", False):
+        dtg = datetime.datetime.strftime(datetime.datetime.now(),
+                                         "%Y%m%d_%H%M%S")
+        subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
+        mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+
+    err_sup = args_array.get("-w", False)
+    dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
+            mail=mail)
     cmds_gen.disconnect([server])
 
 
@@ -273,6 +312,7 @@ def main():
         dir_chk_list -> contains options which will be directories.
         dir_crt_list -> contain options that require directory to be created.
         opt_arg_list -> contains arguments to add to command line by default.
+        opt_con_req_dict -> contains options requiring other options.
         opt_dump_list -> contains optional arguments to mysqldump.
         opt_multi_list -> contains the options that will have multiple values.
         opt_req_list -> contains the options that are required for the program.
@@ -284,35 +324,37 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-o", "-d", "-p"]
     dir_crt_list = ["-o"]
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
+    opt_con_req_dict = {"-t": ["-e"]}
     opt_dump_list = {"-s": "--single-transaction",
                      "-D": ["--all-databases", "--triggers", "--routines",
                             "--events"],
                      "-r": "--set-gtid-purged=OFF"}
-    opt_multi_list = ["-B"]
+    opt_multi_list = ["-B", "-e", "-t"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y"]
+    opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y", "-e", "-t"]
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list,
+    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
                                        multi_val=opt_multi_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
        and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
-                                          dir_crt_list):
+                                          dir_crt_list) \
+       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict):
 
         try:
-            prog_lock = gen_class.ProgramLock(sys.argv,
+            prog_lock = gen_class.ProgramLock(cmdline.argv,
                                               args_array.get("-y", ""))
-            run_program(args_array, opt_arg_list, opt_dump_list,
-                        multi_val=opt_multi_list)
+            run_program(args_array, opt_arg_list, opt_dump_list)
             del prog_lock
 
         except gen_class.SingleInstanceException:
