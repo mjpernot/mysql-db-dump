@@ -93,16 +93,17 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.local = "/opt/local"
         self.db_list = ["db1", "db2", "db3"]
         self.db_list2 = ["db1", "db3"]
         self.db_list3 = ["db4", "db5"]
-        self.args_array = {"-p": "/opt/local"}
-        self.args_array2 = {"-p": "/opt/local", "-D": True}
-        self.args_array3 = {"-p": "/opt/local", "-A": True}
-        self.args_array4 = {"-p": "/opt/local", "-B": self.db_list}
-        self.args_array5 = {"-p": "/opt/local", "-B": self.db_list2}
-        self.args_array6 = {"-p": "/opt/local", "-B": self.db_list}
-        self.args_array7 = {"-p": "/opt/local", "-B": self.db_list3}
+        self.args_array = {"-p": self.local}
+        self.args_array2 = {"-p": self.local, "-D": True}
+        self.args_array3 = {"-p": self.local, "-A": True}
+        self.args_array4 = {"-p": self.local, "-B": self.db_list}
+        self.args_array5 = {"-p": self.local, "-B": self.db_list2}
+        self.args_array6 = {"-p": self.local, "-B": self.db_list}
+        self.args_array7 = {"-p": self.local, "-B": self.db_list3}
         self.results = []
 
     @mock.patch("mysql_db_dump.mysql_libs.fetch_db_dict",

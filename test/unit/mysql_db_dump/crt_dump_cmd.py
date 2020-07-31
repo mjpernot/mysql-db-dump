@@ -24,12 +24,10 @@ else:
     import unittest
 
 # Third-party
-import mock
 
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_dump
-import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -89,25 +87,26 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.ign_tbl = "--ignore-table=mysql.event"
+        self.mydump = "/opt/local/mysqldump"
         self.server = Server()
         self.args_array = {"-p": "/opt/local"}
         self.args_array2 = {"-p": "/opt/local/"}
-        self.opt_arg_list = ["--ignore-table=mysql.event"]
-        self.opt_arg_list2 = ["--ignore-table=mysql.event", "--skip-system"]
-        self.opt_dump_list = {"-s": "--single-transaction",
-                              "-D": ["--all-databases", "--triggers",
-                                     "--routines", "--events"],
-                              "-r": "--set-gtid-purged=OFF"}
-        self.results = ['mysqldump', '-u', 'mysql', '-ppswd', '-h',
-                        'hostname', '-P', '3306', '--ignore-table=mysql.event']
-        self.results2 = ['/opt/local/mysqldump', '-u', 'mysql', '-ppswd', '-h',
-                         'hostname', '-P', '3306',
-                         '--ignore-table=mysql.event']
-        self.results3 = ['/opt/local/mysqldump', '-u', 'mysql', '-ppswd', '-h',
-                         'hostname', '-P', '3306']
-        self.results4 = ['/opt/local/mysqldump', '-u', 'mysql', '-ppswd', '-h',
-                         'hostname', '-P', '3306',
-                         '--ignore-table=mysql.event', '--skip-system']
+        self.opt_arg_list = [self.ign_tbl]
+        self.opt_arg_list2 = [self.ign_tbl, "--skip-system"]
+        self.opt_dump_list = {
+            "-s": "--single-transaction", "-D": [
+                "--all-databases", "--triggers", "--routines", "--events"],
+            "-r": "--set-gtid-purged=OFF"}
+        self.results = ["mysqldump", "-u", "mysql", "-ppswd", "-h",
+                        "hostname", "-P", "3306", self.ign_tbl]
+        self.results2 = [self.mydump, "-u", "mysql", "-ppswd", "-h",
+                         "hostname", "-P", "3306", self.ign_tbl]
+        self.results3 = [self.mydump, "-u", "mysql", "-ppswd", "-h",
+                         "hostname", "-P", "3306"]
+        self.results4 = [
+            self.mydump, "-u", "mysql", "-ppswd", "-h", "hostname", "-P",
+            "3306", self.ign_tbl, "--skip-system"]
 
     def test_multiple_opt_arg_list(self):
 
@@ -133,9 +132,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, self.args_array, [], self.opt_dump_list),
-            self.results3)
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(self.server, self.args_array, [],
+                                       self.opt_dump_list), self.results3)
 
     @unittest.skip("Bug: Adds extra slash to directory path.")
     def test_p_option2(self):
@@ -176,9 +175,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, [], self.opt_arg_list, self.opt_dump_list),
-            self.results)
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(self.server, [], self.opt_arg_list,
+                                       self.opt_dump_list), self.results)
 
 
 if __name__ == "__main__":
