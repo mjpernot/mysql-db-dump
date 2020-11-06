@@ -8,6 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.0.0 library.
 
 ### Changed
+- main:  Made "-o" a required argumnet for "-A", "-B", and "-D" options.
 - config/mysql_cfg.py.TEMPLATE:  Changed entry name.
 - Documentation updates.
 

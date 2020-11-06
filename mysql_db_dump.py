@@ -332,7 +332,7 @@ def main():
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
-    opt_con_req_dict = {"-t": ["-e"]}
+    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"]}
     opt_dump_list = {"-s": "--single-transaction",
                      "-D": ["--all-databases", "--triggers", "--routines",
                             "--events"],
