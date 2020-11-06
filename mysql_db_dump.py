@@ -281,7 +281,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     db_list = set_db_list(server, args_array, **kwargs)
 
     # Remove the -r option if database is not GTID enabled.
-    if "-r" in args_array and not server.gtid_mode and "-r" in dump_cmd:
+    if "-r" in args_array and not server.gtid_mode \
+       and opt_dump_list["-r"] in dump_cmd:
         dump_cmd.remove(opt_dump_list["-r"])
 
     compress = args_array.get("-z", False)
