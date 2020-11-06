@@ -286,7 +286,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         dump_cmd.remove(opt_dump_list["-r"])
 
     compress = args_array.get("-z", False)
-    dmp_path = "./"
+    dmp_path = None
 
     if "-o" in args_array:
         dmp_path = args_array["-o"] + "/"
