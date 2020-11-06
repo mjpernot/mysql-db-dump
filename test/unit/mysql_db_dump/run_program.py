@@ -327,7 +327,6 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_db_dump.run_program(
             self.args_array, self.opt_arg_list, self.opt_dump_list))
 
-    @unittest.skip("Bug:  If -r option value not in command list.")
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
                 mock.Mock(return_value=True))
