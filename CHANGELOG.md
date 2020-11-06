@@ -7,6 +7,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ## [3.3.0] - 2020-11-06
 - Updated to use the mysql_libs v5.0.0 library.
 
+### Fixed
+- run_program:  Remove "-r" from command line if database not GTID enabled.
+
 ### Changed
 - set_db_list:  Replace multiple returns with single return.
 - run_program:  Changed default value of dmp_path to None.
