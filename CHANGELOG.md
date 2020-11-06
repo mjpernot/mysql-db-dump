@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.0] - 2020-11-06
+### Changed
+- config/mysql_cfg.py.TEMPLATE:  Changed entry name.
+
+
 ## [3.2.0] - 2020-07-06
 ### Fixed
 - main: Fixed handling command line arguments from SonarQube scan finding.
