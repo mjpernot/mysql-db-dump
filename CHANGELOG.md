@@ -5,8 +5,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.0] - 2020-11-06
+- Updated to use the mysql_libs v5.0.0 library.
+
 ### Changed
 - config/mysql_cfg.py.TEMPLATE:  Changed entry name.
+- Documentation updates.
 
 
 ## [3.2.0] - 2020-07-06
