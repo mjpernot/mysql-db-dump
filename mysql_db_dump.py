@@ -235,6 +235,7 @@ def set_db_list(server, args_array, **kwargs):
     """
 
     args_array = dict(args_array)
+    dump_list = []
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
@@ -246,15 +247,13 @@ def set_db_list(server, args_array, **kwargs):
             print("Warning: Database(%s) does not exist." % (item))
 
         # Intersect of -B databases to database list.
-        return list(set(args_array["-B"]) & set(db_list))
+        dump_list = list(set(args_array["-B"]) & set(db_list))
 
     # All databases.
     elif "-A" in args_array:
-        return db_list
+        dump_list = list(db_list)
 
-    # -D option or no option.
-    else:
-        return []
+    return dump_list
 
 
 def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
