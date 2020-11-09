@@ -13,7 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - set_db_list:  Replace multiple returns with single return.
 - run_program:  Changed default value of dmp_path to None.
-- main:  Made "-o" a required argumnet for "-A", "-B", and "-D" options.
+- main:  Made "-o" a required argument for "-A", "-B", and "-D" options.
 - config/mysql_cfg.py.TEMPLATE:  Changed entry name.
 - Documentation updates.
 
