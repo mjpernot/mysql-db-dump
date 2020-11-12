@@ -121,10 +121,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        gtid_arg = "--set-gtid-purged=OFF"
         self.server = Server()
-        self.dump_cmd = ["dump_command", "--set-gtid-purged=OFF"]
+        self.dump_cmd = ["dump_command", gtid_arg]
         self.dump_cmd2 = ["dump_command"]
-        self.dump_cmd3 = ["dump_command", "--set-gtid-purged=OFF"]
+        self.dump_cmd3 = ["dump_command", gtid_arg]
         self.db_list = []
         self.args_array = {"-c": "config", "-d": "/dir"}
         self.args_array2 = {"-c": "config", "-d": "/dir", "-o": "/dir/path"}
@@ -143,7 +144,7 @@ class UnitTest(unittest.TestCase):
         self.opt_dump_list = {
             "-s": "--single-transaction",
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
-            "-r": "--set-gtid-purged=OFF"}
+            "-r": gtid_arg}
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.cmds_gen.disconnect",
