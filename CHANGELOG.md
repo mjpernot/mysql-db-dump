@@ -8,6 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.0.0 library.
 
 ### Fixed
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 - run_program:  Remove "-r" from command line if database not GTID enabled.
 
 ### Changed
