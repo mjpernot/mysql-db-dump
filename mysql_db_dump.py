@@ -8,29 +8,31 @@
 
     Usage:
         mysql_db_dump.py -c file -d path
-            {-B db_name [db_name ...] | -A | -D}
-            [-o /path/name] [-p /path] [-s] [-z] [-r] [-y flavor_id] [-w]
+            {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] |
+             -A -o /path/name [-s] [-z] [-r] |
+             -D -o /path/name [-s] [-z] [-r] }
+            [-p /path]  [-y flavor_id] [-w]
             [-e email {email2 email3 ...} {-t subject_line}]
             [-v | -h]
 
     Arguments:
+        -c file => Server configuration file.  Required arg.
+        -d dir path => Directory path to config file (-c). Required arg.
         -B databases => Database names, space delimited.
         -A => Dump all databases to individual files.
         -D => Dump all databases to a single dump file.
-        -c file => Server configuration file.  Required arg.
-        -d dir path => Directory path to config file (-c). Required arg.
         -o dir path => Directory path to dump directory.
+        -s => Run dump as a single transaction.
+        -r => Remove GTID entries from dump file.
+        -z => Compress database dump files.
         -p dir path => Directory path to mysql programs.  Only required
             if the mysql binary programs do not run properly.  (i.e. not
             in the $PATH variable.)
-        -s => Run dump as a single transaction.
-        -r => Remove GTID entries from dump file.
         -w => Redirect standard error out from the database dump command to an
             error file that will be co-located with the database dump file(s).
         -e email_address(es) => Send output to one or more email addresses.
         -t subject_line => Subject line of email.
             Requires -t option.
-        -z => Compress database dump files.
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
@@ -42,7 +44,7 @@
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
             # Configuration file for Database
             user = "USER"
-            passwd = "PASSWORD"
+            japd = "PSWORD"
             host = "SERVER_IP"
             name = "HOST_NAME"
             sid = SERVER_ID
@@ -233,6 +235,7 @@ def set_db_list(server, args_array, **kwargs):
     """
 
     args_array = dict(args_array)
+    dump_list = []
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
@@ -244,15 +247,13 @@ def set_db_list(server, args_array, **kwargs):
             print("Warning: Database(%s) does not exist." % (item))
 
         # Intersect of -B databases to database list.
-        return list(set(args_array["-B"]) & set(db_list))
+        dump_list = list(set(args_array["-B"]) & set(db_list))
 
     # All databases.
     elif "-A" in args_array:
-        return db_list
+        dump_list = list(db_list)
 
-    # -D option or no option.
-    else:
-        return []
+    return dump_list
 
 
 def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
@@ -280,11 +281,12 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     db_list = set_db_list(server, args_array, **kwargs)
 
     # Remove the -r option if database is not GTID enabled.
-    if "-r" in args_array and not server.gtid_mode:
+    if "-r" in args_array and not server.gtid_mode \
+       and opt_dump_list["-r"] in dump_cmd:
         dump_cmd.remove(opt_dump_list["-r"])
 
     compress = args_array.get("-z", False)
-    dmp_path = "./"
+    dmp_path = None
 
     if "-o" in args_array:
         dmp_path = args_array["-o"] + "/"
@@ -330,7 +332,7 @@ def main():
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
-    opt_con_req_dict = {"-t": ["-e"]}
+    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"]}
     opt_dump_list = {"-s": "--single-transaction",
                      "-D": ["--all-databases", "--triggers", "--routines",
                             "--events"],
