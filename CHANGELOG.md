@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.0] - 2020-11-06
+- Updated to use the mysql_libs v5.0.0 library.
+
+### Fixed
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+- run_program:  Remove "-r" from command line if database not GTID enabled.
+
+### Changed
+- set_db_list:  Replace multiple returns with single return.
+- run_program:  Changed default value of dmp_path to None.
+- main:  Made "-o" a required argument for "-A", "-B", and "-D" options.
+- config/mysql_cfg.py.TEMPLATE:  Changed entry name.
+- Documentation updates.
+
+
 ## [3.2.0] - 2020-07-06
 ### Fixed
 - main: Fixed handling command line arguments from SonarQube scan finding.
