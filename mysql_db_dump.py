@@ -96,6 +96,8 @@
             of the --defaults-extra-file option (i.e. extra_def_file) in the
             database configuration file.  See below for the defaults-extra-file
             format.
+        NOTE 3:  Ignore the entries for replication login as this template is
+            used for a variety of different MySQL programs.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
