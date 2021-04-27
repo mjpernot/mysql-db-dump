@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.1] - 2021-04-27
+
+### Changed
+- run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
+
+
 ## [3.3.0] - 2020-11-06
 - Updated to use the mysql_libs v5.0.0 library.
 
