@@ -148,7 +148,7 @@ def help_message():
     print(__doc__)
 
 
-def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list, **kwargs):
+def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list):
 
     """Function:  crt_dump_cmd
 
@@ -259,7 +259,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
             mail.send_mail(use_mailx=kwargs.get("use_mailx", False))
 
 
-def set_db_list(server, args_array, **kwargs):
+def set_db_list(server, args_array):
 
     """Function:  set_db_list
 
