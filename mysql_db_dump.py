@@ -181,6 +181,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         (input) **kwargs:
             err_sup -> Suppression of standard error to standard out.
             mail -> Email class instance.
+            use_mailx -> True|False - Override postfix and use mailx.
 
     """
 
@@ -217,7 +218,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
             for line in gen_libs.file_2_list(efile):
                 mail.add_2_msg(line)
 
-            mail.send_mail()
+            mail.send_mail(use_mailx=kwargs.get("use_mailx", False))
 
 
 def set_db_list(server, args_array, **kwargs):
