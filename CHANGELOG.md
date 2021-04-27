@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main:  Added -u option to allow for mailx use.
 - run_program:  Added use_mailx keyword argument to dump_db call.
 - run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
+- Documentation updates.
 
 
 ## [3.3.0] - 2020-11-06

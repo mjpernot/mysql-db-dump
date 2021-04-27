@@ -8,31 +8,67 @@
 
     Usage:
         mysql_db_dump.py -c file -d path
-            {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] |
-             -A -o /path/name [-s] [-z] [-r] |
-             -D -o /path/name [-s] [-z] [-r] }
-            [-p /path]  [-y flavor_id] [-w]
-            [-e email {email2 email3 ...} {-t subject_line} [-u]]
+            {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] [-w]
+                [-e email {email2 email3 ...} {-t subject_line} [-u]]
+                [-p dir_path] |
+             -A -o /path/name [-s] [-z] [-r] [-w]
+                [-e email {email2 email3 ...} {-t subject_line} [-u]]
+                [-p dir_path] |
+             -D -o /path/name [-s] [-z] [-r] [-w]
+                [-e email {email2 email3 ...} {-t subject_line} [-u]]
+                [-p dir_path]}
+            [-y flavor_id]
             [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
-        -B databases => Database names, space delimited.
+
+        -B databases [db_name ...] => Database names, space delimited.
+            -o dir path => Directory path to dump directory.
+            -s => Run dump as a single transaction.
+            -r => Remove GTID entries from dump file.
+            -z => Compress database dump files.
+            -p dir_path => Directory path to mysql programs.  Only required
+                if the mysql binary programs do not run properly.  (i.e. not
+                in the $PATH variable.)
+            -w => Redirect standard error out from the database dump command to
+                an error file that will be co-located with the database dump
+                file(s).
+            -e email_address(es) => Send output to one or more email addresses.
+                -t subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+
         -A => Dump all databases to individual files.
+            -o dir path => Directory path to dump directory.
+            -s => Run dump as a single transaction.
+            -r => Remove GTID entries from dump file.
+            -z => Compress database dump files.
+            -p dir_path => Directory path to mysql programs.  Only required
+                if the mysql binary programs do not run properly.  (i.e. not
+                in the $PATH variable.)
+            -w => Redirect standard error out from the database dump command to
+                an error file that will be co-located with the database dump
+                file(s).
+            -e email_address(es) => Send output to one or more email addresses.
+                -t subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+
         -D => Dump all databases to a single dump file.
-        -o dir path => Directory path to dump directory.
-        -s => Run dump as a single transaction.
-        -r => Remove GTID entries from dump file.
-        -z => Compress database dump files.
-        -p dir path => Directory path to mysql programs.  Only required
-            if the mysql binary programs do not run properly.  (i.e. not
-            in the $PATH variable.)
-        -w => Redirect standard error out from the database dump command to an
-            error file that will be co-located with the database dump file(s).
-        -e email_address(es) => Send output to one or more email addresses.
-            -t subject_line => Subject line of email.
-            -u => Override the default mail command and use mailx.
+            -o dir path => Directory path to dump directory.
+            -s => Run dump as a single transaction.
+            -r => Remove GTID entries from dump file.
+            -z => Compress database dump files.
+            -p dir_path => Directory path to mysql programs.  Only required
+                if the mysql binary programs do not run properly.  (i.e. not
+                in the $PATH variable.)
+            -w => Redirect standard error out from the database dump command to
+                an error file that will be co-located with the database dump
+                file(s).
+            -e email_address(es) => Send output to one or more email addresses.
+                -t subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
