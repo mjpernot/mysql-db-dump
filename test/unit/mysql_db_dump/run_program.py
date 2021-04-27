@@ -91,6 +91,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_mailx2 -> Test with using mailx option.
+        test_mailx -> Test with using no mailx option.
         test_multiple_options2 -> Test with multiple options passed 2.
         test_multiple_options -> Test with multiple options passed.
         test_no_email -> Test with no email configured.
@@ -136,6 +138,8 @@ class UnitTest(unittest.TestCase):
         self.args_array7 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"]}
         self.args_array8 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
                             "t": ["Subject", "Line"]}
+        self.args_array8a = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
+                             "t": ["Subject", "Line"], "-u": True}
         self.args_array9 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
                             "t": ["Subject", "Line"], "-z": True}
         self.args_array10 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
@@ -147,7 +151,53 @@ class UnitTest(unittest.TestCase):
             "-r": gtid_arg}
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_mailx2(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_mailx2
+
+        Description:  Test with using mailx option.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(
+            self.args_array8a, self.opt_arg_list, self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_mailx(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_mailx
+
+        Description:  Test with using no mailx option.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(
+            self.args_array8, self.opt_arg_list, self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -170,7 +220,7 @@ class UnitTest(unittest.TestCase):
             self.args_array10, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -193,7 +243,7 @@ class UnitTest(unittest.TestCase):
             self.args_array9, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -216,7 +266,7 @@ class UnitTest(unittest.TestCase):
             self.args_array, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -239,7 +289,7 @@ class UnitTest(unittest.TestCase):
             self.args_array8, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -262,7 +312,7 @@ class UnitTest(unittest.TestCase):
             self.args_array7, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -285,7 +335,7 @@ class UnitTest(unittest.TestCase):
             self.args_array7, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -308,7 +358,7 @@ class UnitTest(unittest.TestCase):
             self.args_array6, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -331,7 +381,7 @@ class UnitTest(unittest.TestCase):
             self.args_array, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -356,7 +406,7 @@ class UnitTest(unittest.TestCase):
             self.args_array5, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -381,7 +431,7 @@ class UnitTest(unittest.TestCase):
             self.args_array5, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -406,7 +456,7 @@ class UnitTest(unittest.TestCase):
             self.args_array5, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -429,7 +479,7 @@ class UnitTest(unittest.TestCase):
             self.args_array5, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -452,7 +502,7 @@ class UnitTest(unittest.TestCase):
             self.args_array4, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -475,7 +525,7 @@ class UnitTest(unittest.TestCase):
             self.args_array3, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -498,7 +548,7 @@ class UnitTest(unittest.TestCase):
             self.args_array, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
@@ -521,7 +571,7 @@ class UnitTest(unittest.TestCase):
             self.args_array2, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_dump.cmds_gen.disconnect",
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
