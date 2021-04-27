@@ -12,7 +12,7 @@
              -A -o /path/name [-s] [-z] [-r] |
              -D -o /path/name [-s] [-z] [-r] }
             [-p /path]  [-y flavor_id] [-w]
-            [-e email {email2 email3 ...} {-t subject_line}]
+            [-e email {email2 email3 ...} {-t subject_line} [-u]]
             [-v | -h]
 
     Arguments:
@@ -31,8 +31,8 @@
         -w => Redirect standard error out from the database dump command to an
             error file that will be co-located with the database dump file(s).
         -e email_address(es) => Send output to one or more email addresses.
-        -t subject_line => Subject line of email.
-            Requires -t option.
+            -t subject_line => Subject line of email.
+            -u => Override the default mail command and use mailx.
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
@@ -181,6 +181,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         (input) **kwargs:
             err_sup -> Suppression of standard error to standard out.
             mail -> Email class instance.
+            use_mailx -> True|False - Override postfix and use mailx.
 
     """
 
@@ -217,7 +218,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
             for line in gen_libs.file_2_list(efile):
                 mail.add_2_msg(line)
 
-            mail.send_mail()
+            mail.send_mail(use_mailx=kwargs.get("use_mailx", False))
 
 
 def set_db_list(server, args_array, **kwargs):
@@ -299,8 +300,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     err_sup = args_array.get("-w", False)
     dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-            mail=mail)
-    cmds_gen.disconnect([server])
+            mail=mail, use_mailx=args_array.get("-u", False))
+    mysql_libs.disconnect(server)
 
 
 def main():
@@ -332,7 +333,8 @@ def main():
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
-    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"]}
+    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"],
+                        "-u": ["-e"]}
     opt_dump_list = {"-s": "--single-transaction",
                      "-D": ["--all-databases", "--triggers", "--routines",
                             "--events"],

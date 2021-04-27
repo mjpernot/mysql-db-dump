@@ -226,8 +226,10 @@ class UnitTest(unittest.TestCase):
 
         mock_list.return_value = self.db_list
 
-        self.assertEqual(mysql_db_dump.set_db_list(
-            self.server, self.args_array3), self.db_list)
+        self.db_list.sort()
+        results = mysql_db_dump.set_db_list(self.server, self.args_array3)
+        results.sort()
+        self.assertEqual(results, self.db_list)
 
     @mock.patch("mysql_db_dump.mysql_libs.fetch_db_dict",
                 mock.Mock(return_value=True))

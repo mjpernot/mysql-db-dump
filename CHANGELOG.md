@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.1] - 2021-04-27
+### Added
+- Added -u option to override postfix and use mailx command.
+
+### Changed
+- dump_db:  Set the use_mailx argument in the mail.send_mail command.
+- main:  Added -u option to allow for mailx use.
+- run_program:  Added use_mailx keyword argument to dump_db call.
+- run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
+
+
 ## [3.3.0] - 2020-11-06
 - Updated to use the mysql_libs v5.0.0 library.
 

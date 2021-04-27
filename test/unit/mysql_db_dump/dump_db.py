@@ -75,17 +75,23 @@ class Mail(object):
 
         return True
 
-    def send_mail(self):
+    def send_mail(self, use_mailx=False):
 
         """Method:  send_mail
 
         Description:  Stub method holder for Mail.send_mail.
 
         Arguments:
+            (input) use_mailx -> True|False - To use mailx command.
 
         """
 
-        return True
+        status = True
+
+        if use_mailx:
+            status = True
+
+        return status
 
 
 class UnitTest(unittest.TestCase):
@@ -96,6 +102,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_email_mailx -> Test with override postfix and use mailx.
+        test_email_no_mailx -> Test with using postfix email command.
         test_email_single_line -> Test with email with single line.
         test_email_multiple_lines -> Test with email with multiple lines.
         test_email_empty -> Test with empty file.
@@ -130,6 +138,46 @@ class UnitTest(unittest.TestCase):
         self.err_sup = True
         self.filelist = ["Line 1", "Line 2"]
         self.filelist2 = ["Line 1"]
+
+    @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.file_2_list")
+    def test_email_mailx(self, mock_list):
+
+        """Function:  test_email_mailx
+
+        Description:  Test with override postfix and use mailx.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = self.filelist
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
+            err_sup=self.err_sup, mail=self.mail, use_mailx=True))
+
+    @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_dump.dump_run", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.file_2_list")
+    def test_email_no_mailx(self, mock_list):
+
+        """Function:  test_email_no_mailx
+
+        Description:  Test with using postfix email command.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = self.filelist
+
+        self.assertFalse(mysql_db_dump.dump_db(
+            self.dump_cmd, self.db_list2, False, self.dmp_path,
+            err_sup=self.err_sup, mail=self.mail))
 
     @mock.patch("mysql_db_dump.gen_libs.is_empty_file",
                 mock.Mock(return_value=False))
