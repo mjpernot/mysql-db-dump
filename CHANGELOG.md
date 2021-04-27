@@ -5,8 +5,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.1] - 2021-04-27
+### Added
+- Added -u option to override postfix and use mailx command.
 
 ### Changed
+- main:  Added -u option to allow for mailx use.
 - run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
 
 

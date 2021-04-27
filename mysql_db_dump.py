@@ -12,7 +12,7 @@
              -A -o /path/name [-s] [-z] [-r] |
              -D -o /path/name [-s] [-z] [-r] }
             [-p /path]  [-y flavor_id] [-w]
-            [-e email {email2 email3 ...} {-t subject_line}]
+            [-e email {email2 email3 ...} {-t subject_line} [-u]]
             [-v | -h]
 
     Arguments:
@@ -31,8 +31,8 @@
         -w => Redirect standard error out from the database dump command to an
             error file that will be co-located with the database dump file(s).
         -e email_address(es) => Send output to one or more email addresses.
-        -t subject_line => Subject line of email.
-            Requires -t option.
+            -t subject_line => Subject line of email.
+            -u => Override the default mail command and use mailx.
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
@@ -332,7 +332,8 @@ def main():
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
-    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"]}
+    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"],
+                        "-u": ["-e"]}
     opt_dump_list = {"-s": "--single-transaction",
                      "-D": ["--all-databases", "--triggers", "--routines",
                             "--events"],
