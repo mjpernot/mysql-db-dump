@@ -107,8 +107,9 @@
             password="PASSWORD"
             socket=DIRECTORY_PATH/mysql.sock"
 
-        NOTE:  The socket information can be obtained from the my.cnf
+        NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+        NOTE 2:  socket use is only required to be set in certain conditions when connecting using localhost
 
     Example:
         mysql_db_dump.py -c mysql_cfg -d config -A -o /path/dumps -z -s
