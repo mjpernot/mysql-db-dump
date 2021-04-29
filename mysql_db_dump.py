@@ -315,32 +315,38 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     mail = None
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    server.connect()
-    server.set_srv_gtid()
-    dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list)
-    db_list = set_db_list(server, args_array, **kwargs)
+    server.connect(silent=True)
 
-    # Remove the -r option if database is not GTID enabled.
-    if "-r" in args_array and not server.gtid_mode \
-       and opt_dump_list["-r"] in dump_cmd:
-        dump_cmd.remove(opt_dump_list["-r"])
+    if server.conn_msg:
+        print("run_program:  Error encountered on server(%s):  %s" %
+              (server.name, server.conn_msg))
 
-    compress = args_array.get("-z", False)
-    dmp_path = None
+    else:
+        server.set_srv_gtid()
+        dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list)
+        db_list = set_db_list(server, args_array, **kwargs)
 
-    if "-o" in args_array:
-        dmp_path = args_array["-o"] + "/"
+        # Remove the -r option if database is not GTID enabled.
+        if "-r" in args_array and not server.gtid_mode \
+        and opt_dump_list["-r"] in dump_cmd:
+            dump_cmd.remove(opt_dump_list["-r"])
 
-    if args_array.get("-e", False):
-        dtg = datetime.datetime.strftime(datetime.datetime.now(),
-                                         "%Y%m%d_%H%M%S")
-        subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
-        mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+        compress = args_array.get("-z", False)
+        dmp_path = None
 
-    err_sup = args_array.get("-w", False)
-    dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-            mail=mail, use_mailx=args_array.get("-u", False))
-    mysql_libs.disconnect(server)
+        if "-o" in args_array:
+            dmp_path = args_array["-o"] + "/"
+
+        if args_array.get("-e", False):
+            dtg = datetime.datetime.strftime(datetime.datetime.now(),
+                                            "%Y%m%d_%H%M%S")
+            subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
+            mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+
+        err_sup = args_array.get("-w", False)
+        dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
+                mail=mail, use_mailx=args_array.get("-u", False))
+        mysql_libs.disconnect(server)
 
 
 def main():
