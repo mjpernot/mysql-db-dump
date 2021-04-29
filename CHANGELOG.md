@@ -5,6 +5,8 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.1] - 2021-04-27
+- Updated to work in MySQL 8.0 environment.
+- Updated to use the mysql_libs v5.1.0 library.
 - Validated against MySQL 5.7 database.
 
 ### Added
