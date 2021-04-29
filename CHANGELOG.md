@@ -5,6 +5,8 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.1] - 2021-04-27
+- Validated against MySQL 5.7 database.
+
 ### Added
 - Added -u option to override postfix and use mailx command.
 
