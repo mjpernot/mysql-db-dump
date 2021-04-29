@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -u option to override postfix and use mailx command.
 
 ### Changed
+- run_program:  Capture and process status from connect method call.
 - Removed \*\*kwargs from functions not using keyword arguments.
 - config/mysql_cfg.py.TEMPLATE:  Updated to standard format.
 - dump_db:  Set the use_mailx argument in the mail.send_mail command.
