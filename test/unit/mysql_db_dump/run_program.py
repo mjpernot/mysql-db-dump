@@ -29,6 +29,7 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_dump
+import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -57,8 +58,9 @@ class Server(object):
 
         self.gtid_mode = True
         self.name = "ServerName"
+        self.conn_msg = None
 
-    def connect(self):
+    def connect(self, silent=False):
 
         """Method:  connect
 
@@ -68,7 +70,12 @@ class Server(object):
 
         """
 
-        pass
+        status = True
+
+        if silent:
+            status = True
+
+        return status
 
     def set_srv_gtid(self):
 
@@ -91,6 +98,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_connect_failure -> Test with failed connection.
+        test_connect_success -> Test with successful connection.
         test_mailx2 -> Test with using mailx option.
         test_mailx -> Test with using no mailx option.
         test_multiple_options2 -> Test with multiple options passed 2.
@@ -149,6 +158,48 @@ class UnitTest(unittest.TestCase):
             "-s": "--single-transaction",
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
             "-r": gtid_arg}
+
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_connect_failure(self, mock_inst):
+
+        """Function:  test_connect_failure
+
+        Description:  Test with failed connection.
+
+        Arguments:
+
+        """
+
+        self.server.conn_msg = "Error connection message"
+
+        mock_inst.return_value = self.server
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_db_dump.run_program(
+                self.args_array, self.opt_arg_list, self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_connect_success(self, mock_inst, mock_cmd, mock_list):
+
+        """Function:  test_connect_success
+
+        Description:  Test with successful connection.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+
+        self.assertFalse(mysql_db_dump.run_program(
+            self.args_array, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
