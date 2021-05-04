@@ -109,7 +109,8 @@
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
-        NOTE 2:  socket use is only required to be set in certain conditions when connecting using localhost
+        NOTE 2:  socket use is only required to be set in certain conditions
+            when connecting using localhost
 
     Example:
         mysql_db_dump.py -c mysql_cfg -d config -A -o /path/dumps -z -s
@@ -323,12 +324,13 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     else:
         server.set_srv_gtid()
-        dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list)
+        dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list,
+                                opt_dump_list)
         db_list = set_db_list(server, args_array, **kwargs)
 
         # Remove the -r option if database is not GTID enabled.
         if "-r" in args_array and not server.gtid_mode \
-        and opt_dump_list["-r"] in dump_cmd:
+           and opt_dump_list["-r"] in dump_cmd:
             dump_cmd.remove(opt_dump_list["-r"])
 
         compress = args_array.get("-z", False)
@@ -339,8 +341,9 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
         if args_array.get("-e", False):
             dtg = datetime.datetime.strftime(datetime.datetime.now(),
-                                            "%Y%m%d_%H%M%S")
-            subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
+                                             "%Y%m%d_%H%M%S")
+            subj = args_array.get("-t", [server.name, ": mysql_db_dump: ",
+                                         dtg])
             mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
 
         err_sup = args_array.get("-w", False)
