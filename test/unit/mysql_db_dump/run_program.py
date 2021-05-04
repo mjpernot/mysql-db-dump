@@ -77,7 +77,6 @@ class Server(object):
 
         return status
 
-
     def set_srv_gtid(self):
 
         """Method:  set_srv_gtid
