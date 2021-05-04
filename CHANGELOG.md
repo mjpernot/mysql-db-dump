@@ -5,10 +5,15 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.1] - 2021-04-27
+- Updated to work in MySQL 8.0 environment.
+- Updated to use the mysql_libs v5.1.0 library.
+- Validated against MySQL 5.7 database.
+
 ### Added
 - Added -u option to override postfix and use mailx command.
 
 ### Changed
+- run_program:  Capture and process status from connect method call.
 - Removed \*\*kwargs from functions not using keyword arguments.
 - config/mysql_cfg.py.TEMPLATE:  Updated to standard format.
 - dump_db:  Set the use_mailx argument in the mail.send_mail command.
