@@ -8,31 +8,67 @@
 
     Usage:
         mysql_db_dump.py -c file -d path
-            {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] |
-             -A -o /path/name [-s] [-z] [-r] |
-             -D -o /path/name [-s] [-z] [-r] }
-            [-p /path]  [-y flavor_id] [-w]
-            [-e email {email2 email3 ...} {-t subject_line} [-u]]
+            {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] [-w]
+                [-e email {email2 email3 ...} {-t subject_line} [-u]]
+                [-p dir_path] |
+             -A -o /path/name [-s] [-z] [-r] [-w]
+                [-e email {email2 email3 ...} {-t subject_line} [-u]]
+                [-p dir_path] |
+             -D -o /path/name [-s] [-z] [-r] [-w]
+                [-e email {email2 email3 ...} {-t subject_line} [-u]]
+                [-p dir_path]}
+            [-y flavor_id]
             [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
-        -B databases => Database names, space delimited.
+
+        -B databases [db_name ...] => Database names, space delimited.
+            -o dir path => Directory path to dump directory.
+            -s => Run dump as a single transaction.
+            -r => Remove GTID entries from dump file.
+            -z => Compress database dump files.
+            -p dir_path => Directory path to mysql programs.  Only required
+                if the mysql binary programs do not run properly.  (i.e. not
+                in the $PATH variable.)
+            -w => Redirect standard error out from the database dump command to
+                an error file that will be co-located with the database dump
+                file(s).
+            -e email_address(es) => Send output to one or more email addresses.
+                -t subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+
         -A => Dump all databases to individual files.
+            -o dir path => Directory path to dump directory.
+            -s => Run dump as a single transaction.
+            -r => Remove GTID entries from dump file.
+            -z => Compress database dump files.
+            -p dir_path => Directory path to mysql programs.  Only required
+                if the mysql binary programs do not run properly.  (i.e. not
+                in the $PATH variable.)
+            -w => Redirect standard error out from the database dump command to
+                an error file that will be co-located with the database dump
+                file(s).
+            -e email_address(es) => Send output to one or more email addresses.
+                -t subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+
         -D => Dump all databases to a single dump file.
-        -o dir path => Directory path to dump directory.
-        -s => Run dump as a single transaction.
-        -r => Remove GTID entries from dump file.
-        -z => Compress database dump files.
-        -p dir path => Directory path to mysql programs.  Only required
-            if the mysql binary programs do not run properly.  (i.e. not
-            in the $PATH variable.)
-        -w => Redirect standard error out from the database dump command to an
-            error file that will be co-located with the database dump file(s).
-        -e email_address(es) => Send output to one or more email addresses.
-            -t subject_line => Subject line of email.
-            -u => Override the default mail command and use mailx.
+            -o dir path => Directory path to dump directory.
+            -s => Run dump as a single transaction.
+            -r => Remove GTID entries from dump file.
+            -z => Compress database dump files.
+            -p dir_path => Directory path to mysql programs.  Only required
+                if the mysql binary programs do not run properly.  (i.e. not
+                in the $PATH variable.)
+            -w => Redirect standard error out from the database dump command to
+                an error file that will be co-located with the database dump
+                file(s).
+            -e email_address(es) => Send output to one or more email addresses.
+                -t subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
         -h => Help and usage message.
@@ -60,6 +96,8 @@
             of the --defaults-extra-file option (i.e. extra_def_file) in the
             database configuration file.  See below for the defaults-extra-file
             format.
+        NOTE 3:  Ignore the entries for replication login as this template is
+            used for a variety of different MySQL programs.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
@@ -69,8 +107,10 @@
             password="PASSWORD"
             socket=DIRECTORY_PATH/mysql.sock"
 
-        NOTE:  The socket information can be obtained from the my.cnf
+        NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+        NOTE 2:  socket use is only required to be set in certain conditions
+            when connecting using localhost
 
     Example:
         mysql_db_dump.py -c mysql_cfg -d config -A -o /path/dumps -z -s
@@ -110,7 +150,7 @@ def help_message():
     print(__doc__)
 
 
-def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list, **kwargs):
+def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list):
 
     """Function:  crt_dump_cmd
 
@@ -221,7 +261,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
             mail.send_mail(use_mailx=kwargs.get("use_mailx", False))
 
 
-def set_db_list(server, args_array, **kwargs):
+def set_db_list(server, args_array):
 
     """Function:  set_db_list
 
@@ -276,32 +316,40 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     mail = None
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    server.connect()
-    server.set_srv_gtid()
-    dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list)
-    db_list = set_db_list(server, args_array, **kwargs)
+    server.connect(silent=True)
 
-    # Remove the -r option if database is not GTID enabled.
-    if "-r" in args_array and not server.gtid_mode \
-       and opt_dump_list["-r"] in dump_cmd:
-        dump_cmd.remove(opt_dump_list["-r"])
+    if server.conn_msg:
+        print("run_program:  Error encountered on server(%s):  %s" %
+              (server.name, server.conn_msg))
 
-    compress = args_array.get("-z", False)
-    dmp_path = None
+    else:
+        server.set_srv_gtid()
+        dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list,
+                                opt_dump_list)
+        db_list = set_db_list(server, args_array, **kwargs)
 
-    if "-o" in args_array:
-        dmp_path = args_array["-o"] + "/"
+        # Remove the -r option if database is not GTID enabled.
+        if "-r" in args_array and not server.gtid_mode \
+           and opt_dump_list["-r"] in dump_cmd:
+            dump_cmd.remove(opt_dump_list["-r"])
 
-    if args_array.get("-e", False):
-        dtg = datetime.datetime.strftime(datetime.datetime.now(),
-                                         "%Y%m%d_%H%M%S")
-        subj = args_array.get("-t", [server.name, ": mysql_db_dump: ", dtg])
-        mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+        compress = args_array.get("-z", False)
+        dmp_path = None
 
-    err_sup = args_array.get("-w", False)
-    dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-            mail=mail, use_mailx=args_array.get("-u", False))
-    mysql_libs.disconnect(server)
+        if "-o" in args_array:
+            dmp_path = args_array["-o"] + "/"
+
+        if args_array.get("-e", False):
+            dtg = datetime.datetime.strftime(datetime.datetime.now(),
+                                             "%Y%m%d_%H%M%S")
+            subj = args_array.get("-t", [server.name, ": mysql_db_dump: ",
+                                         dtg])
+            mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+
+        err_sup = args_array.get("-w", False)
+        dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
+                mail=mail, use_mailx=args_array.get("-u", False))
+        mysql_libs.disconnect(server)
 
 
 def main():

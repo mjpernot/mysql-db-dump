@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.2] - 2021-05-04
+- Updated to work in MySQL 8.0 environment.
+- Updated to use the mysql_libs v5.1.0 library.
+- Validated against MySQL 5.7 database.
+
+### Changed
+- run_program:  Capture and process status from connect method call.
+- Removed \*\*kwargs from functions not using keyword arguments.
+- config/mysql_cfg.py.TEMPLATE:  Updated to standard format.
+- Documentation updates.
+
+
 ## [3.3.1] - 2021-04-27
 ### Added
 - Added -u option to override postfix and use mailx command.
@@ -42,8 +54,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - dump_db:  Add email capability for dumps error file.
 - run_program:  Setup and configured email.
 - main:  Added -e and -t options to parsing for email capability.
-- set_db_list:  Changed variable to standard naming convention.
-- dump_db:  Changed variable to standard naming convention.
+- dump_db, set_db_list:  Changed variable to standard naming convention.
 - main:  Remove non-used argument in run_program call.
 - dump_run:  Setup subprocess.Popen with stderr option and pass error file to the option.
 - dump_db:  Set up and open error file if error suppression is passed.
@@ -56,18 +67,12 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.0] - 2020-01-17
 ### Fixed
-- crt_dump_cmd:  Fixed problem with mutable default arguments issue.
-- dump_run:  Fixed problem with mutable default arguments issue.
-- dump_db:  Fixed problem with mutable default arguments issue.
-- set_db_list:  Fixed problem with mutable default arguments issue.
-- run_program:  Fixed problem with mutable default arguments issue.
+- dump_run, dump_db, set_db_list, run_program, crt_dump_cmd:  Fixed problem with mutable default arguments issue.
 
 ### Changed
 - main:  Added program lock functionality to program.
 - main:  Added new option -y to the program.
-- crt_dump_cmd:  Changed variable name to standard convention.
-- set_db_list:  Changed variable name to standard convention.
-- run_program:  Changed variable name to standard convention.
+- set_db_list, run_program, crt_dump_cmd:  Changed variable name to standard convention.
 - main:  Refactored and streamlined "if" statements.
 - Added \*\*kwargs to those function parameter lists without the keyword argument capability.
 - Documentation updates.
@@ -82,10 +87,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 Breaking Change
 
 ### Changed
-- Changed "mysql_libs" calls to new naming schema.
-- Changed "cmds_gen" calls to new naming schema.
-- Changed "gen_libs" calls to new naming schema.
-- Changed "arg_parser" calls to new naming schema.
+- Updated "mysql_libs", "cmds_gen", "gen_libs", and "arg_parser" calls to new naming schema.
 - Changed function names from uppercase to lowercase.
 - Setup single-source version control.
 

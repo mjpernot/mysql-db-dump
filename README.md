@@ -41,6 +41,7 @@
 # Installation:
 
 Install the project using git.
+  * From here on out, any reference to {Python_Project} or PYTHON_PROJECT replace with the baseline path of the python program.
 
 ```
 umask 022
@@ -66,7 +67,6 @@ pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host
 ```
 
 # Configuration:
-  * Replace **{Python_Project}** with the baseline path of the python program.
 
 Create MySQL configuration file.
 Make the appropriate change to the environment.
@@ -92,6 +92,7 @@ chmod 600 mysql_cfg.py
 Create MySQL definition file.
 Make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
+  * Note:  socket use is only required to be set in certain conditions when connecting using localhost.
     - password="PASSWORD"
     - socket=DIRECTORY_PATH/mysql.sock
 
@@ -105,7 +106,6 @@ chmod 600 mysql.cfg
 # Program Help Function:
 
   The program has a -h (Help option) that will show display an usage message.  The help message will usually consist of a description, usage, arugments to the program, example, notes about the program, and any known bugs not yet fixed.  To run the help command:
-  * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 {Python_Project}/mysql-db-dump/mysql_db_dump.py -h
@@ -118,36 +118,9 @@ chmod 600 mysql.cfg
 
 ### Installation:
 
-Install the project using git.
-  * Replace **{Python_Project}** with the baseline path of the python program.
-  * Replace **{Branch_Name}** with the name of the Git branch being tested.  See Git Merge Request.
-
-```
-umask 022
-cd {Python_Project}
-git clone --branch {Branch_Name} git@sc.appdev.proj.coe.ic.gov:JAC-DSXD/mysql-db-dump.git
-```
-
-Install/upgrade system modules.
-
-```
-cd mysql-db-dump
-sudo bash
-umask 022
-pip install -r requirements.txt --upgrade --trusted-host pypi.appdev.proj.coe.ic.gov
-exit
-```
-
-Install supporting classes and libraries.
-
-```
-pip install -r requirements-python-lib.txt --target lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
-```
+Install the project using the procedures in the Installation section.
 
 ### Testing:
-  * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 cd {Python_Project}/mysql-db-dump
