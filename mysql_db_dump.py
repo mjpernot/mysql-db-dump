@@ -10,13 +10,13 @@
         mysql_db_dump.py -c file -d path
             {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] [-w]
                 [-e email {email2 email3 ...} {-t subject_line} [-u]]
-                [-p dir_path] |
+                [-p dir_path] [-l] |
              -A -o /path/name [-s] [-z] [-r] [-w]
                 [-e email {email2 email3 ...} {-t subject_line} [-u]]
-                [-p dir_path] |
+                [-p dir_path] [-l] |
              -D -o /path/name [-s] [-z] [-r] [-w]
                 [-e email {email2 email3 ...} {-t subject_line} [-u]]
-                [-p dir_path]}
+                [-p dir_path] [-l]}
             [-y flavor_id]
             [-v | -h]
 
@@ -38,6 +38,7 @@
             -e email_address(es) => Send output to one or more email addresses.
                 -t subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
+            -l => Use SSL connection.
 
         -A => Dump all databases to individual files.
             -o dir path => Directory path to dump directory.
@@ -53,6 +54,7 @@
             -e email_address(es) => Send output to one or more email addresses.
                 -t subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
+            -l => Use SSL connection.
 
         -D => Dump all databases to a single dump file.
             -o dir path => Directory path to dump directory.
@@ -68,6 +70,7 @@
             -e email_address(es) => Send output to one or more email addresses.
                 -t subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
+            -l => Use SSL connection.
 
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
@@ -98,6 +101,17 @@
             format.
         NOTE 3:  Ignore the entries for replication login as this template is
             used for a variety of different MySQL programs.
+        NOTE 4:  If the -l option is used (using SSL connections), then set the
+            one or more of the following options in the config file:
+            ssl_client_ca = "Filename"
+            ssl_ca_path = "Path"
+            ssl_client_key = "Filename"
+            ssl_client_cert = "Filename"
+            ssl_mode = PREFERRED
+            ssl_client_flag =
+            ssl_disabled = False
+            ssl_verify_id = False
+            ssl_verify_cert = False
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.

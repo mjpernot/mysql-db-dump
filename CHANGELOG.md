@@ -8,6 +8,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to work in a SSL environment.
 - Updated to use the mysql_libs v5.2.0 library.
 
+### Added
+- Added -l option to allow for the use of SSL connections.
+
 ### Changed
 - config/mysql_cfg.py.TEMPLATE:  Added SSL options.
 
