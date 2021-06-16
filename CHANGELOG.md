@@ -8,6 +8,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to work in a SSL environment.
 - Updated to use the mysql_libs v5.2.0 library.
 
+### Changed
+- config/mysql_cfg.py.TEMPLATE:  Added SSL options.
+
 
 ## [3.3.2] - 2021-05-04
 - Updated to work in MySQL 8.0 environment.
