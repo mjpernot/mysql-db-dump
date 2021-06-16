@@ -9,6 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.2.0 library.
 
 ### Added
+- add_ssl:  Add SSL options to the dump command line.
 - Added -l option to allow for the use of SSL connections.
 
 ### Changed

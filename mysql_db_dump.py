@@ -149,6 +149,12 @@ import version
 
 __version__ = version.__version__
 
+# Global
+SSL_ARG_DICT = {
+    "ssl_client_ca": "--ssl-ca=", "ssl_ca_path": "--ssl-capath=",
+    "ssl_client_key": "--ssl-key=", "ssl_client_cert": "--ssl-cert=",
+    "ssl_mode": "--ssl-mode="}
+
 
 def help_message():
 
@@ -309,6 +315,49 @@ def set_db_list(server, args_array):
         dump_list = list(db_list)
 
     return dump_list
+
+
+def add_ssl(cfg, dump_cmd):
+
+    """Function:  add_ssl
+
+    Description:  Add SSL options to the dump command line.
+
+    Arguments:
+        (input) cfg -> Configuration file module instance.
+        (input) dump_cmd -> Database dump command line.
+        (output) dump_cmd -> Database dump command line.
+        (output) status -> Status of SSL options.
+        (output) err_msg -> Error message for SSL options.
+
+    """
+
+    global SSL_ARG_DICT
+
+    dump_cmd = list(dump_cmd)
+    status = True
+    err_msg = None
+
+    if hasattr(cfg, "ssl_client_ca") and hasattr(cfg, "ssl_client_key") \
+       and hasattr(cfg, "ssl_client_cert"):
+
+        if getattr(cfg, "ssl_client_ca") \
+           or (getattr(cfg, "ssl_client_key") \
+               and getattr(cfg, "ssl_client_cert")):
+
+            data = [SSL_ARG_DICT[opt] + getattr(cfg, opt)
+                    for opt in SSL_ARG_DICT.keys() if getattr(cfg, opt)]
+            dump_cmd.extend(data)
+
+        else:
+            status = False
+            err_msg = "One or more values missing for required SSL settings."
+
+    else:
+        status = False
+        err_msg = "Configuration file is missing SSL entries."
+
+    return dump_cmd, status, err_msg
 
 
 def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
