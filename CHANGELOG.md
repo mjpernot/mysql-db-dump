@@ -13,7 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -l option to allow for the use of SSL connections.
 
 ### Changed
-- run_program:  Process SSL options if detected and added check not to run database dump command if SSL configuration is not setup correctly.
+- run_program:  Call add_ssl to process SSL options if detected and added check not to run database dump command if SSL configuration is not setup correctly.
 - config/mysql_cfg.py.TEMPLATE:  Added SSL options.
 
 
