@@ -341,9 +341,8 @@ def add_ssl(cfg, dump_cmd):
     if hasattr(cfg, "ssl_client_ca") and hasattr(cfg, "ssl_client_key") \
        and hasattr(cfg, "ssl_client_cert"):
 
-        if getattr(cfg, "ssl_client_ca") \
-           or (getattr(cfg, "ssl_client_key")
-               and getattr(cfg, "ssl_client_cert")):
+        if getattr(cfg, "ssl_client_ca") or (getattr(cfg, "ssl_client_key") and
+                                             getattr(cfg, "ssl_client_cert")):
 
             data = [SSL_ARG_DICT[opt] + getattr(cfg, opt)
                     for opt in SSL_ARG_DICT.keys() if getattr(cfg, opt)]
