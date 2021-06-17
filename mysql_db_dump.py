@@ -422,9 +422,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
                     mail=mail, use_mailx=args_array.get("-u", False))
 
         else:
-            if args_array["-l"]:
-                print("run_program:  Error encountered with SSL setup: %s" %
-                      (err_msg))
+            print("run_program:  Error encountered with SSL setup: %s" %
+                  (err_msg))
 
         mysql_libs.disconnect(server)
 
