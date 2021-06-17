@@ -127,6 +127,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        ssl_ca = "--ssl-ca="
+        ssl_capath = "--ssl-capath="
+        ssl_cert = "--ssl-cert="
+        ssl_key = "--ssl-key="
         self.cfg = CfgTest()
         self.cfg2 = CfgTest2()
         self.dump_cmd = ["dump_command"]
@@ -138,23 +142,23 @@ class UnitTest(unittest.TestCase):
         self.cert = "/path/cert.pem"
         self.ca_path = "/path"
         self.results = list(self.dump_cmd)
-        self.results.append("--ssl-ca=" + self.ca_pem)
+        self.results.append(ssl_ca + self.ca_pem)
         self.results.append(self.mode)
         self.results2 = list(self.dump_cmd)
-        self.results2.append("--ssl-cert=" + self.cert)
+        self.results2.append(ssl_cert + self.cert)
         self.results2.append(self.mode)
-        self.results2.append("--ssl-key=" + self.key)
+        self.results2.append(ssl_key + self.key)
         self.results3 = list(self.dump_cmd)
-        self.results3.append("--ssl-cert=" + self.cert)
-        self.results3.append("--ssl-ca=" + self.ca_pem)
+        self.results3.append(ssl_cert + self.cert)
+        self.results3.append(ssl_ca + self.ca_pem)
         self.results3.append(self.mode)
-        self.results3.append("--ssl-key=" + self.key)
+        self.results3.append(ssl_key + self.key)
         self.results4 = list(self.dump_cmd)
-        self.results4.append("--ssl-cert=" + self.cert)
-        self.results4.append("--ssl-ca=" + self.ca_pem)
+        self.results4.append(ssl_cert + self.cert)
+        self.results4.append(ssl_ca + self.ca_pem)
         self.results4.append(self.mode)
-        self.results4.append("--ssl-capath=" + self.ca_path)
-        self.results4.append("--ssl-key=" + self.key)
+        self.results4.append(ssl_capath + self.ca_path)
+        self.results4.append(ssl_key + self.key)
 
     def test_ca_path2(self):
 
@@ -169,7 +173,7 @@ class UnitTest(unittest.TestCase):
         self.cfg.ssl_client_ca = self.ca_pem
         self.cfg.ssl_client_key = self.key
         self.cfg.ssl_client_cert = self.cert
-        self.cfg.ssl_ca_path = "/path"
+        self.cfg.ssl_ca_path = self.ca_path
         dump_cmd = mysql_db_dump.add_ssl(self.cfg, self.dump_cmd)
 
         self.assertEqual((dump_cmd[1], dump_cmd[2]), (True, None))
@@ -187,7 +191,7 @@ class UnitTest(unittest.TestCase):
         self.cfg.ssl_client_ca = self.ca_pem
         self.cfg.ssl_client_key = self.key
         self.cfg.ssl_client_cert = self.cert
-        self.cfg.ssl_ca_path = "/path"
+        self.cfg.ssl_ca_path = self.ca_path
         dump_cmd = mysql_db_dump.add_ssl(self.cfg, self.dump_cmd)
 
         self.assertEqual(dump_cmd[0], self.results4)
