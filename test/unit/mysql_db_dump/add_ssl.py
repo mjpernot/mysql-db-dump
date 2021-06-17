@@ -28,7 +28,6 @@ else:
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_dump
-import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
