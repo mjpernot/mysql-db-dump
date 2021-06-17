@@ -10,13 +10,13 @@
         mysql_db_dump.py -c file -d path
             {-B db_name [db_name ...] -o /path/name [-s] [-z] [-r] [-w]
                 [-e email {email2 email3 ...} {-t subject_line} [-u]]
-                [-p dir_path] |
+                [-p dir_path] [-l] |
              -A -o /path/name [-s] [-z] [-r] [-w]
                 [-e email {email2 email3 ...} {-t subject_line} [-u]]
-                [-p dir_path] |
+                [-p dir_path] [-l] |
              -D -o /path/name [-s] [-z] [-r] [-w]
                 [-e email {email2 email3 ...} {-t subject_line} [-u]]
-                [-p dir_path]}
+                [-p dir_path] [-l]}
             [-y flavor_id]
             [-v | -h]
 
@@ -38,6 +38,7 @@
             -e email_address(es) => Send output to one or more email addresses.
                 -t subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
+            -l => Use SSL connection.
 
         -A => Dump all databases to individual files.
             -o dir path => Directory path to dump directory.
@@ -53,6 +54,7 @@
             -e email_address(es) => Send output to one or more email addresses.
                 -t subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
+            -l => Use SSL connection.
 
         -D => Dump all databases to a single dump file.
             -o dir path => Directory path to dump directory.
@@ -68,6 +70,7 @@
             -e email_address(es) => Send output to one or more email addresses.
                 -t subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
+            -l => Use SSL connection.
 
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
@@ -98,6 +101,17 @@
             format.
         NOTE 3:  Ignore the entries for replication login as this template is
             used for a variety of different MySQL programs.
+        NOTE 4:  If the -l option is used (using SSL connections), then set the
+            one or more of the following options in the config file:
+            ssl_client_ca = "Filename"
+            ssl_ca_path = "Path"
+            ssl_client_key = "Filename"
+            ssl_client_cert = "Filename"
+            ssl_mode = PREFERRED
+            ssl_client_flag =
+            ssl_disabled = False
+            ssl_verify_id = False
+            ssl_verify_cert = False
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
@@ -134,6 +148,12 @@ import mysql_lib.mysql_libs as mysql_libs
 import version
 
 __version__ = version.__version__
+
+# Global
+SSL_ARG_DICT = {
+    "ssl_client_ca": "--ssl-ca=", "ssl_ca_path": "--ssl-capath=",
+    "ssl_client_key": "--ssl-key=", "ssl_client_cert": "--ssl-cert=",
+    "ssl_mode": "--ssl-mode="}
 
 
 def help_message():
@@ -297,6 +317,48 @@ def set_db_list(server, args_array):
     return dump_list
 
 
+def add_ssl(cfg, dump_cmd):
+
+    """Function:  add_ssl
+
+    Description:  Add SSL options to the dump command line.
+
+    Arguments:
+        (input) cfg -> Configuration file module instance.
+        (input) dump_cmd -> Database dump command line.
+        (output) dump_cmd -> Database dump command line.
+        (output) status -> Status of SSL options.
+        (output) err_msg -> Error message for SSL options.
+
+    """
+
+    global SSL_ARG_DICT
+
+    dump_cmd = list(dump_cmd)
+    status = True
+    err_msg = None
+
+    if hasattr(cfg, "ssl_client_ca") and hasattr(cfg, "ssl_client_key") \
+       and hasattr(cfg, "ssl_client_cert"):
+
+        if getattr(cfg, "ssl_client_ca") or (getattr(cfg, "ssl_client_key") and
+                                             getattr(cfg, "ssl_client_cert")):
+
+            data = [SSL_ARG_DICT[opt] + getattr(cfg, opt)
+                    for opt in SSL_ARG_DICT.keys() if getattr(cfg, opt)]
+            dump_cmd.extend(data)
+
+        else:
+            status = False
+            err_msg = "One or more values missing for required SSL settings."
+
+    else:
+        status = False
+        err_msg = "Configuration file is missing SSL entries."
+
+    return dump_cmd, status, err_msg
+
+
 def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  run_program
@@ -310,6 +372,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """
 
+    status = True
+    err_msg = None
     args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
@@ -347,8 +411,19 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
             mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
 
         err_sup = args_array.get("-w", False)
-        dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-                mail=mail, use_mailx=args_array.get("-u", False))
+
+        if "-l" in args_array:
+            cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+            dump_cmd, status, err_msg = add_ssl(cfg, dump_cmd)
+
+        if status:
+            dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
+                    mail=mail, use_mailx=args_array.get("-u", False))
+
+        else:
+            print("run_program:  Error encountered with SSL setup: %s" %
+                  (err_msg))
+
         mysql_libs.disconnect(server)
 
 

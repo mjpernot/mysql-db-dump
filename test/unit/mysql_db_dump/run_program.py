@@ -98,6 +98,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_ssl_fail -> Test with failed ssl connection setup.
+        test_ssl_success -> Test with successful ssl connection setup.
         test_connect_failure -> Test with failed connection.
         test_connect_success -> Test with successful connection.
         test_mailx2 -> Test with using mailx option.
@@ -153,11 +155,66 @@ class UnitTest(unittest.TestCase):
                             "t": ["Subject", "Line"], "-z": True}
         self.args_array10 = {"-c": "config", "-d": "/dir", "-e": ["EmailAdr"],
                              "t": ["Subject", "Line"], "-z": True, "-w": True}
+        self.args_array11 = {"-c": "config", "-d": "/dir", "-l": True}
         self.opt_arg_list = ["--ignore-table=mysql.event"]
         self.opt_dump_list = {
             "-s": "--single-transaction",
             "-D": ["--all-databases", "--triggers", "--routines", "--events"],
             "-r": gtid_arg}
+
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.load_module",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.add_ssl")
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_ssl_fail(self, mock_inst, mock_cmd, mock_list, mock_ssl):
+
+        """Function:  test_ssl_fail
+
+        Description:  Test with failed ssl connection setup.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+        mock_ssl.return_value = (self.dump_cmd, False, "Error Message")
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_db_dump.run_program(
+                self.args_array11, self.opt_arg_list, self.opt_dump_list))
+
+    @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.mysql_libs.disconnect",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.gen_libs.load_module",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.add_ssl")
+    @mock.patch("mysql_db_dump.set_db_list")
+    @mock.patch("mysql_db_dump.crt_dump_cmd")
+    @mock.patch("mysql_db_dump.mysql_libs.create_instance")
+    def test_ssl_success(self, mock_inst, mock_cmd, mock_list, mock_ssl):
+
+        """Function:  test_ssl_success
+
+        Description:  Test with successful ssl connection setup.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_cmd.return_value = self.dump_cmd
+        mock_list.return_value = self.db_list
+        mock_ssl.return_value = (self.dump_cmd, True, None)
+
+        self.assertFalse(mysql_db_dump.run_program(
+            self.args_array11, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_connect_failure(self, mock_inst):
