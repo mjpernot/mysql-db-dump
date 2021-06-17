@@ -342,7 +342,7 @@ def add_ssl(cfg, dump_cmd):
        and hasattr(cfg, "ssl_client_cert"):
 
         if getattr(cfg, "ssl_client_ca") \
-           or (getattr(cfg, "ssl_client_key") \
+           or (getattr(cfg, "ssl_client_key")
                and getattr(cfg, "ssl_client_cert")):
 
             data = [SSL_ARG_DICT[opt] + getattr(cfg, opt)
@@ -422,8 +422,9 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
                     mail=mail, use_mailx=args_array.get("-u", False))
 
         else:
-            print("run_program:  Error encountered with SSL setup: %s" %
-                  (err_msg))
+            if status:
+                print("run_program:  Error encountered with SSL setup: %s" %
+                      (err_msg))
 
         mysql_libs.disconnect(server)
 
