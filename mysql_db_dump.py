@@ -373,6 +373,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """
 
+    status = True
+    err_msg = None
     args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
@@ -410,8 +412,19 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
             mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
 
         err_sup = args_array.get("-w", False)
-        dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-                mail=mail, use_mailx=args_array.get("-u", False))
+
+        if "-l" in args_array:
+            cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+            dump_cmd, status, err_msg = add_ssl(cfg, dump_cmd)
+
+        if status:
+            dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
+                    mail=mail, use_mailx=args_array.get("-u", False))
+
+        else:
+            print("run_program:  Error encountered with SSL setup: %s" %
+                  (err_msg))
+
         mysql_libs.disconnect(server)
 
 
