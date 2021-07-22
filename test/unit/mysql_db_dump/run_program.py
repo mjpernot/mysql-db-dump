@@ -42,7 +42,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -97,30 +97,30 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_ssl_fail -> Test with failed ssl connection setup.
-        test_ssl_success -> Test with successful ssl connection setup.
-        test_connect_failure -> Test with failed connection.
-        test_connect_success -> Test with successful connection.
-        test_mailx2 -> Test with using mailx option.
-        test_mailx -> Test with using no mailx option.
-        test_multiple_options2 -> Test with multiple options passed 2.
-        test_multiple_options -> Test with multiple options passed.
-        test_no_email -> Test with no email configured.
-        test_email_subj -> Test with subject line passed.
-        test_email_no_subj -> Test with no subject line passed.
-        test_email -> Test with email configured.
-        test_w_option2 -> Test with -w option set to True.
-        test_w_option -> Test with -w option set to False.
-        test_r_option_miss -> Test with -r option value not in command list.
-        test_r_option3 -> Test with -r option and GTID set to False.
-        test_r_option2 -> Test with -r option and GTID set to False.
-        test_r_option -> Test with -r option and GTID set to True.
-        test_z_option2 -> Test with -z option set to False.
-        test_z_option -> Test with -z option set to True.
-        test_no_o_option -> Test with no -o option.
-        test_o_option -> Test with -o option.
-        test_run_program -> Test run_program with default settings.
+        setUp
+        test_ssl_fail
+        test_ssl_success
+        test_connect_failure
+        test_connect_success
+        test_mailx2
+        test_mailx
+        test_multiple_options2
+        test_multiple_options
+        test_no_email
+        test_email_subj
+        test_email_no_subj
+        test_email
+        test_w_option2
+        test_w_option
+        test_r_option_miss
+        test_r_option3
+        test_r_option2
+        test_r_option
+        test_z_option2
+        test_z_option
+        test_no_o_option
+        test_o_option
+        test_run_program
 
     """
 
