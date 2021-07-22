@@ -30,12 +30,8 @@
     - python-pip
 
   * Local class/library dependencies within the program structure.
-    - lib/cmds_gen
-    - lib/arg_parser
-    - lib/gen_libs
-    - lib/gen_class
-    - mysql_lib/mysql_libs
-    - mysql_lib/mysql_class
+    - python-lib
+    - mysql-lib
 
 
 # Installation:
@@ -71,6 +67,7 @@ pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host
 Create MySQL configuration file.
 Make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
+  * Note:  May have to set host to "localhost" to use sockets properly when using SSL connections.
     - user = "USER"
     - japd = "PSWORD"
     - host = "SERVER_IP"
@@ -78,9 +75,21 @@ Make the appropriate change to the environment.
     - sid = SERVER_ID
     - extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
     - cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
+
   * Change these entries only if required:
     - serv_os = "Linux"
     - port = 3306
+
+  * If SSL connections are being used, configure one or more of these entries:
+    - ssl_client_ca = None
+    - ssl_client_key = None
+    - ssl_client_cert = None
+
+  * Only changes these if necessary and have knowledge in MySQL SSL configuration setup:
+    - ssl_client_flag = None
+    - ssl_disabled = False
+    - ssl_verify_id = False
+    - ssl_verify_cert = False
 
 ```
 cd config
