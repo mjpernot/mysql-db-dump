@@ -5,6 +5,8 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.4.1] - 2021-06-22
+### Fixed
+- config/mysql_cfg.py.TEMPLATE:  Fixed ssl_mode entry format.
 
 
 ## [3.4.0] - 2021-06-15
