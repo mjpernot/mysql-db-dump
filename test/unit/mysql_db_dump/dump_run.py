@@ -41,8 +41,8 @@ class SubProcess(object):
     Description:  Class which is a representation of the subprocess class.
 
     Methods:
-        __init__ -> Initialize configuration environment.
-        wait -> subprocess.wait method.
+        __init__
+        wait
 
     """
 
@@ -78,12 +78,12 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_error_file -> Test with error file passed.
-        test_compress_true -> Test with compression set to True.
-        test_compress_false -> Test with compression set to False.
-        test_dump_run -> Test with only default arguments passed.
-        tearDown -> Clean up of unit testing.
+        setUp
+        test_error_file
+        test_compress_true
+        test_compress_false
+        test_dump_run
+        tearDown
 
     """
 

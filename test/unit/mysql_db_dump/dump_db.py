@@ -42,9 +42,9 @@ class Mail(object):
     Description:  Class stub holder for gen_class.Mail class.
 
     Methods:
-        __init__ -> Class initialization.
-        add_2_msg -> Stub method holder for Mail.add_2_msg.
-        send_mail -> Stub method holder for Mail.send_mail.
+        __init__
+        add_2_msg
+        send_mail
 
     """
 
@@ -67,7 +67,7 @@ class Mail(object):
         Description:  Stub method holder for Mail.add_2_msg.
 
         Arguments:
-            (input) data -> Message line to add to email body.
+            (input) data
 
         """
 
@@ -82,7 +82,7 @@ class Mail(object):
         Description:  Stub method holder for Mail.send_mail.
 
         Arguments:
-            (input) use_mailx -> True|False - To use mailx command.
+            (input) use_mailx
 
         """
 
@@ -101,20 +101,20 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_email_mailx -> Test with override postfix and use mailx.
-        test_email_no_mailx -> Test with using postfix email command.
-        test_email_single_line -> Test with email with single line.
-        test_email_multiple_lines -> Test with email with multiple lines.
-        test_email_empty -> Test with empty file.
-        test_email -> Test with email option.
-        test_db_list_w_option -> Test with -w option with list of databases.
-        test_all_dbs_w_option -> Test with -z option with all databases.
-        test_db_list2 -> Test with list of databases.
-        test_db_list -> Test with list of databases.
-        test_all_dbs -> Test with all databases.
-        test_dump_db -> Test with only default arguments passed.
-        tearDown -> Clean up of unit testing.
+        setUp
+        test_email_mailx
+        test_email_no_mailx
+        test_email_single_line
+        test_email_multiple_lines
+        test_email_empty
+        test_email
+        test_db_list_w_option
+        test_all_dbs_w_option
+        test_db_list2
+        test_db_list
+        test_all_dbs
+        test_dump_db
+        tearDown
 
     """
 
