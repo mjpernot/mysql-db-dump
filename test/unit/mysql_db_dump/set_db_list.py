@@ -42,7 +42,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -70,15 +70,15 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_b_option_none2 -> Test with the -B option with no databases.
-        test_b_option_none -> Test with the -B option with no databases.
-        test_b_option_some2 -> Test with the -B option with some databases.
-        test_b_option_some -> Test with the -B option with some databases.
-        test_b_option_all -> Test with the -B option with all databases.
-        test_a_option -> Test with the -A option.
-        test_d_option -> Test with the -D option.
-        test_set_db_list -> Test with only default arguments passed.
+        setUp
+        test_b_option_none2
+        test_b_option_none
+        test_b_option_some2
+        test_b_option_some
+        test_b_option_all
+        test_a_option
+        test_d_option
+        test_set_db_list
 
     """
 

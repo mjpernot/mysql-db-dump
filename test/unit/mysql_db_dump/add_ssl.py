@@ -40,7 +40,7 @@ class CfgTest2(object):
     Description:  Class which is a representation of a cfg module.
 
     Methods:
-        __init__ -> Initialize configuration environment.
+        __init__
 
     """
 
@@ -67,7 +67,7 @@ class CfgTest(object):
     Description:  Class which is a representation of a cfg module.
 
     Methods:
-        __init__ -> Initialize configuration environment.
+        __init__
 
     """
 
@@ -95,24 +95,24 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_ca_path2 -> Test with ca path passed.
-        test_ca_path -> Test with ca path passed.
-        test_all2 -> Test with ca, key and cert passed.
-        test_all -> Test with ca, key and cert passed.
-        test_cert_only2 -> Test with only cert passed.
-        test_cert_only -> Test with only cert passed.
-        test_key_only2 -> Test with only key passed.
-        test_key_only -> Test with only key passed.
-        test_key_cert2 -> Test with key and client passed.
-        test_key_cert -> Test with key and client passed.
-        test_ca_only2 -> Test with only client CA passed.
-        test_ca_only -> Test with only client CA passed.
-        test_missing2 -> Test with missing an argument.
-        test_missing -> Test with missing an argument.
-        test_default2 -> Test with only default arguments passed.
-        test_default -> Test with only default arguments passed.
-        tearDown -> Clean up of unit testing.
+        setUp
+        test_ca_path2
+        test_ca_path
+        test_all2
+        test_all
+        test_cert_only2
+        test_cert_only
+        test_key_only2
+        test_key_only
+        test_key_cert2
+        test_key_cert
+        test_ca_only2
+        test_ca_only
+        test_missing2
+        test_missing
+        test_default2
+        test_default
+        tearDown
 
     """
 
