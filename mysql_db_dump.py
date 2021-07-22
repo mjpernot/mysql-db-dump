@@ -92,26 +92,35 @@
             port = 3306
             cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
+            # If SSL connections are being used, configure one or more of these
+                entries:
+            ssl_client_ca = "CAFilename"
+            ssl_ca_path = "CAPath"
+            ssl_client_key = "KeyFilename"
+            ssl_client_cert = "CertFilename"
+            ssl_mode = "PREFERRED"
+
+            # Only changes these if necessary and have knowledge in MySQL
+                SSL configuration setup:
+            ssl_client_flag = None
+            ssl_disabled = False
+            ssl_verify_id = False
+            ssl_verify_cert = False
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
+
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
             the command line.  To suppress this warning, will require the use
             of the --defaults-extra-file option (i.e. extra_def_file) in the
             database configuration file.  See below for the defaults-extra-file
             format.
+
         NOTE 3:  Ignore the entries for replication login as this template is
             used for a variety of different MySQL programs.
-        NOTE 4:  If the -l option is used (using SSL connections), then set the
-            one or more of the following options in the config file:
-            ssl_client_ca = "Filename"
-            ssl_ca_path = "Path"
-            ssl_client_key = "Filename"
-            ssl_client_cert = "Filename"
-            ssl_mode = PREFERRED
-            ssl_client_flag =
-            ssl_disabled = False
-            ssl_verify_id = False
-            ssl_verify_cert = False
+
+        NOTE 4:  May have to set host to "localhost" to use sockets properly
+            when using SSL connections.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
@@ -123,7 +132,7 @@
 
         NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
-        NOTE 2:  socket use is only required to be set in certain conditions
+        NOTE 2:  Socket use is only required to be set in certain conditions
             when connecting using localhost
 
     Example:
