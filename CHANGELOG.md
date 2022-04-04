@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.4.2] - 2020-04-04
+### Fixed
+- Timestamps on files are not using 24-hour clock.  Updated gen_libs to v2.8.5 or better.
+
 ### Changed
 - crt_dump_cmd, dump_db: Replaced cmds_gen module with gen_libs module.
 
