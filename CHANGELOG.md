@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.4.2] - 2020-04-04
+### Fixed
+- Timestamps on files are not using 24-hour clock.  Updated gen_libs to v2.8.5 or better.
+
+### Changed
+- crt_dump_cmd, dump_db: Replaced cmds_gen module with gen_libs module.
+
+### Removed
+- cmds_gen module
+
+
 ## [3.4.1] - 2021-06-22
 ### Fixed
 - config/mysql_cfg.py.TEMPLATE:  Fixed ssl_mode entry format.
