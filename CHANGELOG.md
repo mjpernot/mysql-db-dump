@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.4.2] - 2020-04-04
+
+
 ## [3.4.1] - 2021-06-22
 ### Fixed
 - config/mysql_cfg.py.TEMPLATE:  Fixed ssl_mode entry format.
