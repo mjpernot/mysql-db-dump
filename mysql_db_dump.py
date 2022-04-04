@@ -151,7 +151,6 @@ import datetime
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
 import lib.gen_class as gen_class
-import lib.cmds_gen as cmds_gen
 import mysql_lib.mysql_class as mysql_class
 import mysql_lib.mysql_libs as mysql_libs
 import version
@@ -202,10 +201,10 @@ def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list):
 
     # Add arguments to dump command.
     for arg in opt_arg_list:
-        dump_args = cmds_gen.add_cmd(dump_args, arg=arg)
+        dump_args = gen_libs.add_cmd(dump_args, arg=arg)
 
     # Append additional options to command.
-    return cmds_gen.is_add_cmd(args_array, dump_args, opt_dump_list)
+    return gen_libs.is_add_cmd(args_array, dump_args, opt_dump_list)
 
 
 def dump_run(dump_cmd, dmp_file, compress, **kwargs):
@@ -264,7 +263,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     if db_list:
         for item in db_list:
-            dump_cmd = cmds_gen.add_cmd(dump_cmd, arg=item)
+            dump_cmd = gen_libs.add_cmd(dump_cmd, arg=item)
             dmp_file = gen_libs.crt_file_time(item, dmp_path, ".sql")
             dump_run(dump_cmd, dmp_file, compress, errfile=errfile)
 

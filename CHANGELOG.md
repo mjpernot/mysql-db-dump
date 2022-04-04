@@ -5,6 +5,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.4.2] - 2020-04-04
+### Changed
+- crt_dump_cmd, dump_db: Replaced cmds_gen module with gen_libs module.
+
+### Removed
+- cmds_gen module
 
 
 ## [3.4.1] - 2021-06-22
