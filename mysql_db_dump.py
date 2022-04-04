@@ -305,8 +305,8 @@ def set_db_list(server, args_array):
 
     args_array = dict(args_array)
     dump_list = []
-    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
-                                   "Database")
+    db_list = gen_libs.dict_2_list(
+        mysql_libs.fetch_db_dict(server), "Database")
 
     # Specified databases.
     if "-B" in args_array:
@@ -386,8 +386,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
     mail = None
-    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-                                        mysql_class.Server)
+    server = mysql_libs.create_instance(
+        args_array["-c"], args_array["-d"], mysql_class.Server)
     server.connect(silent=True)
 
     if server.conn_msg:
@@ -396,8 +396,8 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     else:
         server.set_srv_gtid()
-        dump_cmd = crt_dump_cmd(server, args_array, opt_arg_list,
-                                opt_dump_list)
+        dump_cmd = crt_dump_cmd(
+            server, args_array, opt_arg_list, opt_dump_list)
         db_list = set_db_list(server, args_array, **kwargs)
 
         # Remove the -r option if database is not GTID enabled.
@@ -412,10 +412,10 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
             dmp_path = args_array["-o"] + "/"
 
         if args_array.get("-e", False):
-            dtg = datetime.datetime.strftime(datetime.datetime.now(),
-                                             "%Y%m%d_%H%M%S")
-            subj = args_array.get("-t", [server.name, ": mysql_db_dump: ",
-                                         dtg])
+            dtg = datetime.datetime.strftime(
+                datetime.datetime.now(), "%Y%m%d_%H%M%S")
+            subj = args_array.get(
+                "-t", [server.name, ": mysql_db_dump: ", dtg])
             mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
 
         err_sup = args_array.get("-w", False)
@@ -464,26 +464,26 @@ def main():
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
-    opt_con_req_dict = {"-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"],
-                        "-u": ["-e"]}
-    opt_dump_list = {"-s": "--single-transaction",
-                     "-D": ["--all-databases", "--triggers", "--routines",
-                            "--events"],
-                     "-r": "--set-gtid-purged=OFF"}
+    opt_con_req_dict = {
+        "-t": ["-e"], "-A": ["-o"], "-B": ["-o"], "-D": ["-o"], "-u": ["-e"]}
+    opt_dump_list = {
+        "-s": "--single-transaction",
+        "-D": ["--all-databases", "--triggers", "--routines", "--events"],
+        "-r": "--set-gtid-purged=OFF"}
     opt_multi_list = ["-B", "-e", "-t"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y", "-e", "-t"]
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
-                                       multi_val=opt_multi_list)
+    args_array = arg_parser.arg_parse2(
+        cmdline.argv, opt_val_list, multi_val=opt_multi_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
        and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
-                                          dir_crt_list) \
+       and not arg_parser.arg_dir_chk_crt(
+           args_array, dir_chk_list, dir_crt_list) \
        and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict):
 
         try:
