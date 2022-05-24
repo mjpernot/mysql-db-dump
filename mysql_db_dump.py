@@ -107,6 +107,9 @@
             ssl_verify_id = False
             ssl_verify_cert = False
 
+            # TLS versions: Set the TLS versions allowed in the connection
+            tls_versions = []
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
 
