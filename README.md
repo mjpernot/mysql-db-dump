@@ -91,6 +91,9 @@ Make the appropriate change to the environment.
     - ssl_verify_id = False
     - ssl_verify_cert = False
 
+  * TLS version: Set what TLS versions are allowed in the connection set up.
+    - tls_versions = []
+
 ```
 cd config
 cp mysql_cfg.py.TEMPLATE mysql_cfg.py
