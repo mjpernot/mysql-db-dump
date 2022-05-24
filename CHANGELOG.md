@@ -5,6 +5,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.4.3] - 2022-05-24
+- Updated mysql-connector-python to 8.0.22
 
 
 ## [3.4.2] - 2022-04-04
