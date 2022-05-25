@@ -23,6 +23,7 @@ pipeline {
                 pip2 install mock==2.0.0 --user
                 pip2 install mysql-connector-python==8.0.22 --user
                 ./test/unit/mysql_db_dump/add_ssl.py
+                ./test/unit/mysql_db_dump/add_tls.py
                 ./test/unit/mysql_db_dump/crt_dump_cmd.py
                 ./test/unit/mysql_db_dump/dump_db.py
                 ./test/unit/mysql_db_dump/dump_run.py
