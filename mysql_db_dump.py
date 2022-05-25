@@ -447,6 +447,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         if "-l" in args_array:
             cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
             dump_cmd, status, err_msg = add_ssl(cfg, dump_cmd)
+            dump_cmd = add_tls(cfg, dump_cmd)
 
         if status:
             dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,

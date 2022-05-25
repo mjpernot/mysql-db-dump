@@ -12,6 +12,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - add_tls: Add TLS option to the dump command line, if available.
 
 ### Changed
+- run_program: Added call to add_tls function to add TLS versions to the dump command line.
 - config/mysql_cfg.py.TEMPLATE: Added tls-version entry to allow for setting of TLS versions.
 - Documentation updates.
 
