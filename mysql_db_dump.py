@@ -370,6 +370,27 @@ def add_ssl(cfg, dump_cmd):
     return dump_cmd, status, err_msg
 
 
+def add_tls(cfg, dump_cmd):
+
+    """Function:  add_tls
+
+    Description:  Add TLS option to the dump command line, if available.
+
+    Arguments:
+        (input) cfg -> Configuration file module instance.
+        (input) dump_cmd -> Database dump command line.
+        (output) dump_cmd -> Database dump command line.
+
+    """
+
+    dump_cmd = list(dump_cmd)
+
+    if hasattr(cfg, "tls_versions") and getattr(cfg, "tls_versions"):
+        dump_cmd.append("--tls-version=" + str(getattr(cfg, "tls_versions")))
+
+    return dump_cmd
+
+
 def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  run_program

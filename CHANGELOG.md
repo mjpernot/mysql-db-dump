@@ -8,6 +8,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated mysql-connector-python to v8.0.22
 - Updated mysql-libs to v5.3.1
 
+### Added
+- add_tls: Add TLS option to the dump command line, if available.
+
 ### Changed
 - config/mysql_cfg.py.TEMPLATE: Added tls-version entry to allow for setting of TLS versions.
 - Documentation updates.
