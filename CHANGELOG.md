@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.4.3] - 2022-05-24
+- Updated mysql-connector-python to v8.0.22
+- Updated mysql-libs to v5.3.1
+
+### Added
+- add_tls: Add TLS option to the dump command line, if available.
+
+### Changed
+- run_program: Added call to add_tls function to add TLS versions to the dump command line.
+- config/mysql_cfg.py.TEMPLATE: Added tls-version entry to allow for setting of TLS versions.
+- Documentation updates.
+
+
 ## [3.4.2] - 2022-04-04
 ### Fixed
 - Timestamps on files are not using 24-hour clock.  Updated gen_libs to v2.8.6.

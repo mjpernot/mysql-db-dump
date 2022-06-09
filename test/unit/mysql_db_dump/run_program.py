@@ -166,11 +166,13 @@ class UnitTest(unittest.TestCase):
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.gen_libs.load_module",
                 mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.add_tls")
     @mock.patch("mysql_db_dump.add_ssl")
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
-    def test_ssl_fail(self, mock_inst, mock_cmd, mock_list, mock_ssl):
+    def test_ssl_fail(self, mock_inst, mock_cmd, mock_list, mock_ssl,
+                      mock_tls):
 
         """Function:  test_ssl_fail
 
@@ -184,6 +186,7 @@ class UnitTest(unittest.TestCase):
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
         mock_ssl.return_value = (self.dump_cmd, False, "Error Message")
+        mock_tls.return_value = self.dump_cmd
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_dump.run_program(
@@ -194,11 +197,13 @@ class UnitTest(unittest.TestCase):
                 mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.gen_libs.load_module",
                 mock.Mock(return_value=True))
+    @mock.patch("mysql_db_dump.add_tls")
     @mock.patch("mysql_db_dump.add_ssl")
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
-    def test_ssl_success(self, mock_inst, mock_cmd, mock_list, mock_ssl):
+    def test_ssl_success(self, mock_inst, mock_cmd, mock_list, mock_ssl,
+                         mock_tls):
 
         """Function:  test_ssl_success
 
@@ -212,6 +217,7 @@ class UnitTest(unittest.TestCase):
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
         mock_ssl.return_value = (self.dump_cmd, True, None)
+        mock_tls.return_value = self.dump_cmd
 
         self.assertFalse(mysql_db_dump.run_program(
             self.args_array11, self.opt_arg_list, self.opt_dump_list))
