@@ -107,6 +107,9 @@
             ssl_verify_id = False
             ssl_verify_cert = False
 
+            # TLS versions: Set the TLS versions allowed in the connection
+            tls_versions = []
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
 
@@ -367,6 +370,27 @@ def add_ssl(cfg, dump_cmd):
     return dump_cmd, status, err_msg
 
 
+def add_tls(cfg, dump_cmd):
+
+    """Function:  add_tls
+
+    Description:  Add TLS option to the dump command line, if available.
+
+    Arguments:
+        (input) cfg -> Configuration file module instance.
+        (input) dump_cmd -> Database dump command line.
+        (output) dump_cmd -> Database dump command line.
+
+    """
+
+    dump_cmd = list(dump_cmd)
+
+    if hasattr(cfg, "tls_versions") and getattr(cfg, "tls_versions"):
+        dump_cmd.append("--tls-version=" + str(getattr(cfg, "tls_versions")))
+
+    return dump_cmd
+
+
 def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  run_program
@@ -423,6 +447,7 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
         if "-l" in args_array:
             cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
             dump_cmd, status, err_msg = add_ssl(cfg, dump_cmd)
+            dump_cmd = add_tls(cfg, dump_cmd)
 
         if status:
             dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
