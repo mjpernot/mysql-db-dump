@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.4.4] - 2022-12-15
+- Updated to work in Python 3 too
+- Upgraded python-lib to v2.9.4
+- Upgraded mysql-lib to v5.3.2
+ 
+### Changed
+- Converted imports to use Python 2.7 or Python 3.
+ 
+
 ## [3.4.3] - 2022-05-24
 - Updated mysql-connector-python to v8.0.22
 - Updated mysql-libs to v5.3.1
