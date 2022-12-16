@@ -151,6 +151,7 @@ from __future__ import absolute_import
 import sys
 import subprocess
 import datetime
+import io
 
 # Local
 try:
@@ -240,7 +241,7 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
     dump_cmd = list(dump_cmd)
     e_file = kwargs.get("errfile", None)
 
-    with open(dmp_file, "wb") as f_name:
+    with io.open(dmp_file, "wb") as f_name:
         proc1 = subp.Popen(dump_cmd, stdout=f_name, stderr=e_file)
         proc1.wait()
 

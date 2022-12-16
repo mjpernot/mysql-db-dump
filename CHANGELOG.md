@@ -12,6 +12,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - Converted imports to use Python 2.7 or Python 3.
 - add_ssl: Converted dict keys() call to a list.
+- dump_run: Changed open() to io.open().
  
 
 ## [3.4.3] - 2022-05-24
