@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Classification (U)
 
 """Program:  add_ssl.py
@@ -17,13 +16,7 @@
 # Standard
 import sys
 import os
-
-if sys.version_info < (2, 7):
-    import unittest2 as unittest
-else:
-    import unittest
-
-# Third-party
+import unittest
 
 # Local
 sys.path.append(os.getcwd())
@@ -193,7 +186,7 @@ class UnitTest(unittest.TestCase):
         self.cfg.ssl_ca_path = self.ca_path
         dump_cmd = mysql_db_dump.add_ssl(self.cfg, self.dump_cmd)
 
-        self.assertEqual(dump_cmd[0], self.results4)
+        self.assertEqual(dump_cmd[0].sort(), self.results4.sort())
 
     def test_all2(self):
 
@@ -227,7 +220,7 @@ class UnitTest(unittest.TestCase):
         self.cfg.ssl_client_cert = self.cert
         dump_cmd = mysql_db_dump.add_ssl(self.cfg, self.dump_cmd)
 
-        self.assertEqual(dump_cmd[0], self.results3)
+        self.assertEqual(dump_cmd[0].sort(), self.results3.sort())
 
     def test_cert_only2(self):
 
@@ -319,7 +312,7 @@ class UnitTest(unittest.TestCase):
         self.cfg.ssl_client_cert = self.cert
         dump_cmd = mysql_db_dump.add_ssl(self.cfg, self.dump_cmd)
 
-        self.assertEqual(dump_cmd[0], self.results2)
+        self.assertEqual(dump_cmd[0].sort(), self.results2.sort())
 
     def test_ca_only2(self):
 
