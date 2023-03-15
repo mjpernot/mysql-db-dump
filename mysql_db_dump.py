@@ -144,19 +144,31 @@
 """
 
 # Libraries and Global Variables
+from __future__ import print_function
+from __future__ import absolute_import
 
 # Standard
 import sys
 import subprocess
 import datetime
+import io
 
 # Local
-import lib.arg_parser as arg_parser
-import lib.gen_libs as gen_libs
-import lib.gen_class as gen_class
-import mysql_lib.mysql_class as mysql_class
-import mysql_lib.mysql_libs as mysql_libs
-import version
+try:
+    from .lib import arg_parser
+    from .lib import gen_libs
+    from .lib import gen_class
+    from .mysql_lib import mysql_libs
+    from .mysql_lib import mysql_class
+    from . import version
+
+except (ValueError, ImportError) as err:
+    import lib.arg_parser as arg_parser
+    import lib.gen_libs as gen_libs
+    import lib.gen_class as gen_class
+    import mysql_lib.mysql_libs as mysql_libs
+    import mysql_lib.mysql_class as mysql_class
+    import version
 
 __version__ = version.__version__
 
@@ -229,7 +241,7 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
     dump_cmd = list(dump_cmd)
     e_file = kwargs.get("errfile", None)
 
-    with open(dmp_file, "wb") as f_name:
+    with io.open(dmp_file, "wb") as f_name:
         proc1 = subp.Popen(dump_cmd, stdout=f_name, stderr=e_file)
         proc1.wait()
 
@@ -356,7 +368,7 @@ def add_ssl(cfg, dump_cmd):
                                              getattr(cfg, "ssl_client_cert")):
 
             data = [SSL_ARG_DICT[opt] + getattr(cfg, opt)
-                    for opt in SSL_ARG_DICT.keys() if getattr(cfg, opt)]
+                    for opt in list(SSL_ARG_DICT.keys()) if getattr(cfg, opt)]
             dump_cmd.extend(data)
 
         else:

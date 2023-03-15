@@ -7,7 +7,6 @@
 
 ###  This README file is broken down into the following sections:
   * Features
-  * Prerequisites
   * Installation
   * Configuration
   * Program Help Function
@@ -22,16 +21,6 @@
   * Compress database dump file.
   * Remove GTID entries from the dump file.
   * Redirect standard out error to a file and email.
-
-# Prerequisites:
-
-  * List of Linux packages that need to be installed on the server.
-    - git
-    - python-pip
-
-  * Local class/library dependencies within the program structure.
-    - python-lib
-    - mysql-lib
 
 
 # Installation:
