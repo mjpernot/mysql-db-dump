@@ -480,14 +480,18 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        dir_crt_list -> contain options that require directory to be created.
+        dir_perms_chk -> contains options which will be directories and the
+            octal permission settings
+        dir_perms_crt -> contains options which require directories to be
+            created along with their octal permission settings
+#        dir_chk_list -> contains options which will be directories.
+#        dir_crt_list -> contain options that require directory to be created.
+        multi_val -> contains the options that will have multiple values.
         opt_arg_list -> contains arguments to add to command line by default.
         opt_con_req_dict -> contains options requiring other options.
         opt_dump_list -> contains optional arguments to mysqldump.
-        opt_multi_list -> contains the options that will have multiple values.
         opt_req_list -> contains the options that are required for the program.
-        opt_val_list -> contains options which require values.
+        opt_val -> contains options which require values.
         opt_xor_dict -> contains options which are XOR with its values.
 
     Arguments:
@@ -496,8 +500,10 @@ def main():
     """
 
     cmdline = gen_libs.get_inst(sys)
-    dir_chk_list = ["-o", "-d", "-p"]
-    dir_crt_list = ["-o"]
+#    dir_chk_list = ["-o", "-d", "-p"]
+#    dir_crt_list = ["-o"]
+    dir_perms_chk = {"-d": 5, "-p": 5}
+    dir_perms_crt = {"-o": 6}
 
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
@@ -507,14 +513,17 @@ def main():
         "-s": "--single-transaction",
         "-D": ["--all-databases", "--triggers", "--routines", "--events"],
         "-r": "--set-gtid-purged=OFF"}
-    opt_multi_list = ["-B", "-e", "-t"]
+    multi_val = ["-B", "-e", "-t"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-B", "-c", "-d", "-o", "-p", "-y", "-e", "-t"]
+    opt_val = ["-B", "-c", "-d", "-o", "-p", "-y", "-e", "-t"]
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(
-        cmdline.argv, opt_val_list, multi_val=opt_multi_list)
+#    args_array = arg_parser.arg_parse2(
+#        cmdline.argv, opt_val_list, multi_val=opt_multi_list)
+### STOPPED HERE
+    args = gen_class.ArgParser(
+        cmdline.argv, opt_val=opt_val, multi_val=multi_val, do_parse=True)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
