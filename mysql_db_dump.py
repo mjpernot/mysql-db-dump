@@ -200,11 +200,11 @@ def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list):
     Description:  Create the database dump command line.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
-        (input) opt_arg_list -> List of commands to add to cmd line.
-        (input) opt_dump_list -> Dictionary of additional options.
-        (output) -> Database dump command line.
+        (input) server -> Database server instance
+        (input) args_array -> Array of command line options and values
+        (input) opt_arg_list -> List of commands to add to cmd line
+        (input) opt_dump_list -> Dictionary of additional options
+        (output) -> Database dump command line
 
     """
 
@@ -229,11 +229,11 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
     Description:  Run the database dump command, save to file, and compress.
 
     Arguments:
-        (input) dump_cmd -> Database dump command line.
-        (input) compress -> Compression flag.
-        (input) dmp_file -> Dump file and path name.
+        (input) dump_cmd -> Database dump command line
+        (input) compress -> Compression flag
+        (input) dmp_file -> Dump file and path name
         (input) **kwargs:
-            errfile -> File handler for error file.
+            errfile -> File handler for error file
 
     """
 
@@ -257,14 +257,14 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
         in the database list.  Will create a dump file for each database.
 
     Arguments:
-        (input) dump_cmd -> Database dump command line.
-        (input) db_list -> Array of database names.
-        (input) compress -> Compression flag.
-        (input) dmp_path -> Database dump output directory path.
+        (input) dump_cmd -> Database dump command line
+        (input) db_list -> Array of database names
+        (input) compress -> Compression flag
+        (input) dmp_path -> Database dump output directory path
         (input) **kwargs:
-            err_sup -> Suppression of standard error to standard out.
-            mail -> Email class instance.
-            use_mailx -> True|False - Override postfix and use mailx.
+            err_sup -> Suppression of standard error to standard out
+            mail -> Email class instance
+            use_mailx -> True|False - Override postfix and use mailx
 
     """
 
@@ -312,9 +312,9 @@ def set_db_list(server, args_array):
         database is being selected.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
-        (output) -> Database list.
+        (input) server -> Database server instance
+        (input) args_array -> Array of command line options and values
+        (output) -> Database list
 
     """
 
@@ -347,11 +347,11 @@ def add_ssl(cfg, dump_cmd):
     Description:  Add SSL options to the dump command line.
 
     Arguments:
-        (input) cfg -> Configuration file module instance.
-        (input) dump_cmd -> Database dump command line.
-        (output) dump_cmd -> Database dump command line.
-        (output) status -> Status of SSL options.
-        (output) err_msg -> Error message for SSL options.
+        (input) cfg -> Configuration file module instance
+        (input) dump_cmd -> Database dump command line
+        (output) dump_cmd -> Database dump command line
+        (output) status -> Status of SSL options
+        (output) err_msg -> Error message for SSL options
 
     """
 
@@ -389,9 +389,9 @@ def add_tls(cfg, dump_cmd):
     Description:  Add TLS option to the dump command line, if available.
 
     Arguments:
-        (input) cfg -> Configuration file module instance.
-        (input) dump_cmd -> Database dump command line.
-        (output) dump_cmd -> Database dump command line.
+        (input) cfg -> Configuration file module instance
+        (input) dump_cmd -> Database dump command line
+        (output) dump_cmd -> Database dump command line
 
     """
 
@@ -410,9 +410,9 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Array of command line options and values.
-        (input) opt_arg_list -> List of commands to add to cmd line.
-        (input) opt_dump_list -> Dictionary of additional options.
+        (input) args_array -> Array of command line options and values
+        (input) opt_arg_list -> List of commands to add to cmd line
+        (input) opt_dump_list -> Dictionary of additional options
 
     """
 
@@ -484,18 +484,16 @@ def main():
             octal permission settings
         dir_perms_crt -> contains options which require directories to be
             created along with their octal permission settings
-#        dir_chk_list -> contains options which will be directories.
-#        dir_crt_list -> contain options that require directory to be created.
-        multi_val -> contains the options that will have multiple values.
-        opt_arg_list -> contains arguments to add to command line by default.
-        opt_con_req_dict -> contains options requiring other options.
-        opt_dump_list -> contains optional arguments to mysqldump.
-        opt_req_list -> contains the options that are required for the program.
-        opt_val -> contains options which require values.
-        opt_xor_dict -> contains options which are XOR with its values.
+        multi_val -> contains the options that will have multiple values
+        opt_arg_list -> contains arguments to add to command line by default
+        opt_con_req_dict -> contains options requiring other options
+        opt_dump_list -> contains optional arguments to mysqldump
+        opt_req_list -> contains the options that are required for the program
+        opt_val -> contains options which require values
+        opt_xor_dict -> contains options which are XOR with its values
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> Arguments from the command line
 
     """
 
@@ -504,7 +502,7 @@ def main():
 #    dir_crt_list = ["-o"]
     dir_perms_chk = {"-d": 5, "-p": 5}
     dir_perms_crt = {"-o": 6}
-
+    multi_val = ["-B", "-e", "-t"]
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
     opt_con_req_dict = {
@@ -513,7 +511,6 @@ def main():
         "-s": "--single-transaction",
         "-D": ["--all-databases", "--triggers", "--routines", "--events"],
         "-r": "--set-gtid-purged=OFF"}
-    multi_val = ["-B", "-e", "-t"]
     opt_req_list = ["-c", "-d"]
     opt_val = ["-B", "-c", "-d", "-o", "-p", "-y", "-e", "-t"]
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
@@ -521,16 +518,23 @@ def main():
     # Process argument list from command line.
 #    args_array = arg_parser.arg_parse2(
 #        cmdline.argv, opt_val_list, multi_val=opt_multi_list)
-### STOPPED HERE
     args = gen_class.ArgParser(
         cmdline.argv, opt_val=opt_val, multi_val=multi_val, do_parse=True)
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
-                                          dir_crt_list) \
-       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict):
+    if not gen_libs.help_func(args.get_args(), __version__, help_message)   \
+       and args.arg_require(opt_req=opt_req_list)                           \
+       and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
+       and args.arg_dir_crt(dir_perms_crt=dir_perms_crt)                    \
+       and args.arg_cond_req_or(opt_con_or=opt_con_req_dict):
+
+#    if not gen_libs.help_func(args_array, __version__, help_message) \
+#       and not arg_parser.arg_require(args_array, opt_req_list) \
+#       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
+#       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
+#                                          dir_crt_list) \
+#       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict):
+### STOPPED HERE
 
         try:
             prog_lock = gen_class.ProgramLock(cmdline.argv,
