@@ -498,8 +498,6 @@ def main():
     """
 
     cmdline = gen_libs.get_inst(sys)
-#    dir_chk_list = ["-o", "-d", "-p"]
-#    dir_crt_list = ["-o"]
     dir_perms_chk = {"-d": 5, "-p": 5}
     dir_perms_crt = {"-o": 6}
     multi_val = ["-B", "-e", "-t"]
@@ -516,8 +514,6 @@ def main():
     opt_xor_dict = {"-A": ["-B", "-D"], "-B": ["-A", "-D"], "-D": ["-A", "-B"]}
 
     # Process argument list from command line.
-#    args_array = arg_parser.arg_parse2(
-#        cmdline.argv, opt_val_list, multi_val=opt_multi_list)
     args = gen_class.ArgParser(
         cmdline.argv, opt_val=opt_val, multi_val=multi_val, do_parse=True)
 
@@ -525,26 +521,18 @@ def main():
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
-       and args.arg_dir_crt(dir_perms_crt=dir_perms_crt)                    \
+       and args.arg_dir_crt(dir_chk=dir_perms_crt, dir_crt=dir_perms_crt)   \
        and args.arg_cond_req_or(opt_con_or=opt_con_req_dict):
 
-#    if not gen_libs.help_func(args_array, __version__, help_message) \
-#       and not arg_parser.arg_require(args_array, opt_req_list) \
-#       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-#       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list,
-#                                          dir_crt_list) \
-#       and arg_parser.arg_cond_req_or(args_array, opt_con_req_dict):
-### STOPPED HERE
-
         try:
-            prog_lock = gen_class.ProgramLock(cmdline.argv,
-                                              args_array.get("-y", ""))
-            run_program(args_array, opt_arg_list, opt_dump_list)
+            prog_lock = gen_class.ProgramLock(
+                cmdline.argv, args.get_val("-y", def_val=""))
+            run_program(args, opt_arg_list, opt_dump_list)
             del prog_lock
 
         except gen_class.SingleInstanceException:
             print("WARNING:  Lock in place for mysql_db_dump with id: %s"
-                  % (args_array.get("-y", "")))
+                  % (args.get_val("-y", def_val="")))
 
 
 if __name__ == "__main__":

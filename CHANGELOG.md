@@ -4,7 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [4.0.0] - 2023-03-15
+## [3.5.0] - 2023-03-15
+### Changed
+- Multiple functions: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
 
 
 ## [3.4.4] - 2022-12-15
