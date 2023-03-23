@@ -304,7 +304,7 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
             mail.send_mail(use_mailx=kwargs.get("use_mailx", False))
 
 
-def set_db_list(server, args_array):
+def set_db_list(server, args):
 
     """Function:  set_db_list
 
@@ -313,28 +313,28 @@ def set_db_list(server, args_array):
 
     Arguments:
         (input) server -> Database server instance
-        (input) args_array -> Array of command line options and values
+        (input) args -> ArgParser class instance
         (output) -> Database list
 
     """
+### STOPPED HERE - Need to update unit test module
 
-    args_array = dict(args_array)
     dump_list = []
     db_list = gen_libs.dict_2_list(
         mysql_libs.fetch_db_dict(server), "Database")
 
     # Specified databases.
-    if "-B" in args_array:
+    if args.arg_exist("-B"):
 
         # Difference of -B databases to database list.
-        for item in set(args_array["-B"]) - set(db_list):
+        for item in set(args.get_val("-B")) - set(db_list):
             print("Warning: Database(%s) does not exist." % (item))
 
         # Intersect of -B databases to database list.
-        dump_list = list(set(args_array["-B"]) & set(db_list))
+        dump_list = list(set(args.get_val("-B")) & set(db_list))
 
     # All databases.
-    elif "-A" in args_array:
+    elif args.arg_exist("-A"):
         dump_list = list(db_list)
 
     return dump_list
