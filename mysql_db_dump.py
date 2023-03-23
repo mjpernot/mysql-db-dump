@@ -403,14 +403,14 @@ def add_tls(cfg, dump_cmd):
     return dump_cmd
 
 
-def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
+def run_program(args, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  run_program
 
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Array of command line options and values
+        (input) args -> ArgParser class instance
         (input) opt_arg_list -> List of commands to add to cmd line
         (input) opt_dump_list -> Dictionary of additional options
 
@@ -418,12 +418,11 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
 
     status = True
     err_msg = None
-    args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
     mail = None
     server = mysql_libs.create_instance(
-        args_array["-c"], args_array["-d"], mysql_class.Server)
+        args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
     server.connect(silent=True)
 
     if server.conn_msg:
@@ -433,37 +432,37 @@ def run_program(args_array, opt_arg_list, opt_dump_list, **kwargs):
     else:
         server.set_srv_gtid()
         dump_cmd = crt_dump_cmd(
-            server, args_array, opt_arg_list, opt_dump_list)
-        db_list = set_db_list(server, args_array, **kwargs)
+            server, args, opt_arg_list, opt_dump_list)
+        db_list = set_db_list(server, args, **kwargs)
 
         # Remove the -r option if database is not GTID enabled.
-        if "-r" in args_array and not server.gtid_mode \
+        if args.arg_exist("-r") and not server.gtid_mode \
            and opt_dump_list["-r"] in dump_cmd:
             dump_cmd.remove(opt_dump_list["-r"])
 
-        compress = args_array.get("-z", False)
+        compress = args.get_val("-z", def_val=False)
         dmp_path = None
 
-        if "-o" in args_array:
-            dmp_path = args_array["-o"] + "/"
+        if args.arg_exist("-o"):
+            dmp_path = args.get_val("-o") + "/"
 
-        if args_array.get("-e", False):
+        if args.get_val("-e", def_val=False):
             dtg = datetime.datetime.strftime(
                 datetime.datetime.now(), "%Y%m%d_%H%M%S")
-            subj = args_array.get(
-                "-t", [server.name, ": mysql_db_dump: ", dtg])
-            mail = gen_class.setup_mail(args_array.get("-e"), subj=subj)
+            subj = args.get_val(
+                "-t", def_val=[server.name, ": mysql_db_dump: ", dtg])
+            mail = gen_class.setup_mail(args.get_val("-e"), subj=subj)
 
-        err_sup = args_array.get("-w", False)
+        err_sup = args.get_val("-w", def_val=False)
 
-        if "-l" in args_array:
-            cfg = gen_libs.load_module(args_array["-c"], args_array["-d"])
+        if args.arg_exist("-l"):
+            cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
             dump_cmd, status, err_msg = add_ssl(cfg, dump_cmd)
             dump_cmd = add_tls(cfg, dump_cmd)
 
         if status:
             dump_db(dump_cmd, db_list, compress, dmp_path, err_sup=err_sup,
-                    mail=mail, use_mailx=args_array.get("-u", False))
+                    mail=mail, use_mailx=args.get_val("-u", def_val=False))
 
         else:
             print("run_program:  Error encountered with SSL setup: %s" %
