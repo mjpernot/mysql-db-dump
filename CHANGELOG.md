@@ -5,6 +5,8 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.5.0] - 2023-03-15
+- Replaced the use of arg_parser with gen_class.ArgParser class
+
 ### Changed
 - Multiple functions: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
 
