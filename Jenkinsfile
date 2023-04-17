@@ -9,28 +9,28 @@ pipeline {
         stage('Test') {
             steps {
                 dir ('lib') {
-                    git branch: "mod/286", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/python-lib.git"
+                    git branch: "mod/294", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/python-lib.git"
                 }
                 dir ('mysql_lib') {
-                    git branch: "mod/531", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/mysql-lib.git"
+                    git branch: "mod/532", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/mysql-lib.git"
                 }
                 dir ('mysql_lib/lib') {
-                    git branch: "mod/286", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/python-lib.git"
+                    git branch: "mod/294", credentialsId: "2cfb403c-be21-4fac-94d7-c8cd5c531feb", url: "https://gitlab.code.dicelab.net/JAC-IDM/python-lib.git"
                 }
                 sh """
                 virtualenv test_env
                 source test_env/bin/activate
                 pip2 install mock==2.0.0 --user
                 pip2 install mysql-connector-python==8.0.22 --user
-                ./test/unit/mysql_db_dump/add_ssl.py
-                ./test/unit/mysql_db_dump/add_tls.py
-                ./test/unit/mysql_db_dump/crt_dump_cmd.py
-                ./test/unit/mysql_db_dump/dump_db.py
-                ./test/unit/mysql_db_dump/dump_run.py
-                ./test/unit/mysql_db_dump/help_message.py
-                ./test/unit/mysql_db_dump/main.py
-                ./test/unit/mysql_db_dump/run_program.py
-                ./test/unit/mysql_db_dump/set_db_list.py
+                /usr/bin/python ./test/unit/mysql_db_dump/add_ssl.py
+                /usr/bin/python ./test/unit/mysql_db_dump/add_tls.py
+                /usr/bin/python ./test/unit/mysql_db_dump/crt_dump_cmd.py
+                /usr/bin/python ./test/unit/mysql_db_dump/dump_db.py
+                /usr/bin/python ./test/unit/mysql_db_dump/dump_run.py
+                /usr/bin/python ./test/unit/mysql_db_dump/help_message.py
+                /usr/bin/python ./test/unit/mysql_db_dump/main.py
+                /usr/bin/python ./test/unit/mysql_db_dump/run_program.py
+                /usr/bin/python ./test/unit/mysql_db_dump/set_db_list.py
                 deactivate
                 rm -rf test_env
                 """
