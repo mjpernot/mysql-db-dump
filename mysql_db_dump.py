@@ -193,7 +193,7 @@ def help_message():
     print(__doc__)
 
 
-def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list):
+def crt_dump_cmd(server, args, opt_arg_list, opt_dump_list):
 
     """Function:  crt_dump_cmd
 
@@ -201,25 +201,25 @@ def crt_dump_cmd(server, args_array, opt_arg_list, opt_dump_list):
 
     Arguments:
         (input) server -> Database server instance
-        (input) args_array -> Array of command line options and values
+        (input) args -> ArgParser class instance
         (input) opt_arg_list -> List of commands to add to cmd line
         (input) opt_dump_list -> Dictionary of additional options
         (output) -> Database dump command line
 
     """
 
-    args_array = dict(args_array)
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
     dump_args = mysql_libs.crt_cmd(
-        server, arg_parser.arg_set_path(args_array, "-p") + "mysqldump")
+### STOPPED HERE - Need to fix arg_set_path before going forward.
+        server, args.arg_set_path("-p") + "mysqldump")
 
     # Add arguments to dump command.
     for arg in opt_arg_list:
         dump_args = gen_libs.add_cmd(dump_args, arg=arg)
 
     # Append additional options to command.
-    return gen_libs.is_add_cmd(args_array, dump_args, opt_dump_list)
+    return gen_libs.is_add_cmd(args.get_args(), dump_args, opt_dump_list)
 
 
 def dump_run(dump_cmd, dmp_file, compress, **kwargs):
@@ -317,7 +317,6 @@ def set_db_list(server, args):
         (output) -> Database list
 
     """
-### STOPPED HERE - Need to update unit test module
 
     dump_list = []
     db_list = gen_libs.dict_2_list(
