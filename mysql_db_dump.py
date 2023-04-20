@@ -211,15 +211,14 @@ def crt_dump_cmd(server, args, opt_arg_list, opt_dump_list):
     opt_dump_list = dict(opt_dump_list)
     opt_arg_list = list(opt_arg_list)
     dump_args = mysql_libs.crt_cmd(
-### STOPPED HERE - Need to fix arg_set_path before going forward.
-        server, args.arg_set_path("-p") + "mysqldump")
+        server, args.arg_set_path("-p", cmd="mysqldump"))
 
     # Add arguments to dump command.
     for arg in opt_arg_list:
         dump_args = gen_libs.add_cmd(dump_args, arg=arg)
 
     # Append additional options to command.
-    return gen_libs.is_add_cmd(args.get_args(), dump_args, opt_dump_list)
+    return gen_libs.is_add_cmd(args, dump_args, opt_dump_list)
 
 
 def dump_run(dump_cmd, dmp_file, compress, **kwargs):
@@ -497,7 +496,7 @@ def main():
 
     cmdline = gen_libs.get_inst(sys)
     dir_perms_chk = {"-d": 5, "-p": 5}
-    dir_perms_crt = {"-o": 6}
+    dir_perms_crt = {"-o": 7}
     multi_val = ["-B", "-e", "-t"]
     # --ignore-table=mysql.event -> Skips dumping the event table.
     opt_arg_list = ["--ignore-table=mysql.event"]
@@ -515,7 +514,7 @@ def main():
     args = gen_class.ArgParser(
         cmdline.argv, opt_val=opt_val, multi_val=multi_val, do_parse=True)
 
-    if not gen_libs.help_func(args.get_args(), __version__, help_message)   \
+    if not gen_libs.help_func(args, __version__, help_message)              \
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \

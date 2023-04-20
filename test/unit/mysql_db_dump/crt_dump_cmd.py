@@ -51,7 +51,7 @@ class ArgParser(object):
 
         self.args_array = {"-c": "mysql_cfg", "-d": "config"}
 
-    def arg_set_path(self, arg_opt):
+    def arg_set_path(self, arg_opt, **kwargs):
 
         """Method:  arg_set_path
 
@@ -61,10 +61,9 @@ class ArgParser(object):
 
         """
 
-        path = os.path.join(
-            self.args_array[arg_opt] if arg_opt in self.args_array else "")
-
-        return path
+        return os.path.join(
+            self.args_array[arg_opt] if arg_opt in self.args_array else "",
+            kwargs.get("cmd", ""))
 
     def get_args(self):
 
