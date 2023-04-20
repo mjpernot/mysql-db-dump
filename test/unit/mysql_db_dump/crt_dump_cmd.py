@@ -26,6 +26,58 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_set_path
+        get_args
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def arg_set_path(self, arg_opt, **kwargs):
+
+        """Method:  arg_set_path
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_set_path.
+
+        Arguments:
+
+        """
+
+        return os.path.join(
+            self.args_array[arg_opt] if arg_opt in self.args_array else "",
+            kwargs.get("cmd", ""))
+
+    def get_args(self):
+
+        """Method:  get_args
+
+        Description:  Method stub holder for gen_class.ArgParser.get_args.
+
+        Arguments:
+
+        """
+
+        return self.args_array
+
+
 class Server(object):
 
     """Class:  Server
@@ -80,6 +132,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args = ArgParser()
         self.ign_tbl = "--ignore-table=mysql.event"
         self.mydump = "/opt/local/mysqldump"
         self.server = Server()
@@ -111,9 +164,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, self.args_array, self.opt_arg_list2,
-            self.opt_dump_list), self.results4)
+        self.args.args_array = self.args_array
+
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(
+                self.server, self.args, self.opt_arg_list2,
+                self.opt_dump_list), self.results4)
 
     def test_empty_opt_arg_list(self):
 
@@ -125,9 +181,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         self.assertEqual(
-            mysql_db_dump.crt_dump_cmd(self.server, self.args_array, [],
-                                       self.opt_dump_list), self.results3)
+            mysql_db_dump.crt_dump_cmd(
+                self.server, self.args, [], self.opt_dump_list), self.results3)
 
     def test_p_option2(self):
 
@@ -139,9 +197,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, self.args_array2, self.opt_arg_list,
-            self.opt_dump_list), self.results2)
+        self.args.args_array = self.args_array2
+
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(
+                self.server, self.args, self.opt_arg_list, self.opt_dump_list),
+            self.results2)
 
     def test_p_option(self):
 
@@ -153,9 +214,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertEqual(mysql_db_dump.crt_dump_cmd(
-            self.server, self.args_array, self.opt_arg_list,
-            self.opt_dump_list), self.results2)
+        self.args.args_array = self.args_array
+
+        self.assertEqual(
+            mysql_db_dump.crt_dump_cmd(
+                self.server, self.args, self.opt_arg_list, self.opt_dump_list),
+            self.results2)
 
     def test_crt_dump_cmd(self):
 
@@ -167,9 +231,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = []
+
         self.assertEqual(
-            mysql_db_dump.crt_dump_cmd(self.server, [], self.opt_arg_list,
-                                       self.opt_dump_list), self.results)
+            mysql_db_dump.crt_dump_cmd(
+                self.server, self.args, self.opt_arg_list, self.opt_dump_list),
+            self.results)
 
 
 if __name__ == "__main__":
