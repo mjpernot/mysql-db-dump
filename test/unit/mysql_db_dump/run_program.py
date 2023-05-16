@@ -28,6 +28,56 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class Server(object):
 
     """Class:  Server
@@ -129,6 +179,7 @@ class UnitTest(unittest.TestCase):
 
         gtid_arg = "--set-gtid-purged=OFF"
         self.server = Server()
+        self.args = ArgParser()
         self.dump_cmd = ["dump_command", gtid_arg]
         self.dump_cmd2 = ["dump_command"]
         self.dump_cmd3 = ["dump_command", gtid_arg]
@@ -175,6 +226,8 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array11
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
@@ -182,8 +235,9 @@ class UnitTest(unittest.TestCase):
         mock_tls.return_value = self.dump_cmd
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_dump.run_program(
-                self.args_array11, self.opt_arg_list, self.opt_dump_list))
+            self.assertFalse(
+                mysql_db_dump.run_program(
+                    self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -206,14 +260,17 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array11
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
         mock_ssl.return_value = (self.dump_cmd, True, None)
         mock_tls.return_value = self.dump_cmd
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array11, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
     def test_connect_failure(self, mock_inst):
@@ -226,13 +283,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
         self.server.conn_msg = "Error connection message"
 
         mock_inst.return_value = self.server
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_dump.run_program(
-                self.args_array, self.opt_arg_list, self.opt_dump_list))
+            self.assertFalse(
+                mysql_db_dump.run_program(
+                    self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -250,12 +309,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -273,12 +335,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array8a
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array8a, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -296,12 +361,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array8
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array8, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -319,12 +387,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array10
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array10, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -342,12 +413,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array9
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array9, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -365,12 +439,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -388,12 +465,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array8
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array8, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -411,12 +491,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array7
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array7, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -434,12 +517,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array7
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array7, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -457,12 +543,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array6
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array6, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -480,12 +569,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -503,14 +595,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array5
         self.server.gtid_mode = False
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd2
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array5, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -528,14 +622,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array5
         self.server.gtid_mode = False
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd3
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array5, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -553,14 +649,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array5
         self.server.gtid_mode = False
 
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array5, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -578,12 +676,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array5
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array5, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -601,12 +702,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array4
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array4, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -624,12 +728,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array3
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array3, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -647,12 +754,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -670,12 +780,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array2
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array2, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
     @mock.patch("mysql_db_dump.dump_db", mock.Mock(return_value=True))
     @mock.patch("mysql_db_dump.mysql_libs.disconnect",
@@ -693,12 +806,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         mock_inst.return_value = self.server
         mock_cmd.return_value = self.dump_cmd
         mock_list.return_value = self.db_list
 
-        self.assertFalse(mysql_db_dump.run_program(
-            self.args_array, self.opt_arg_list, self.opt_dump_list))
+        self.assertFalse(
+            mysql_db_dump.run_program(
+                self.args, self.opt_arg_list, self.opt_dump_list))
 
 
 if __name__ == "__main__":
