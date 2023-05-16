@@ -28,6 +28,56 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class Server(object):
 
     """Class:  Server
@@ -86,6 +136,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.args = ArgParser()
         self.local = "/opt/local"
         self.db_list = ["db1", "db2", "db3"]
         self.db_list2 = ["db1", "db3"]
@@ -112,10 +163,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array4
+
         mock_list.return_value = self.db_list3
 
         with gen_libs.no_std_out():
-            results = mysql_db_dump.set_db_list(self.server, self.args_array4)
+            results = mysql_db_dump.set_db_list(self.server, self.args)
 
         results.sort()
         self.assertEqual(results, self.results)
@@ -133,10 +186,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array7
+
         mock_list.return_value = self.db_list
 
         with gen_libs.no_std_out():
-            results = mysql_db_dump.set_db_list(self.server, self.args_array7)
+            results = mysql_db_dump.set_db_list(self.server, self.args)
 
         results.sort()
         self.assertEqual(results, self.results)
@@ -154,12 +209,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array6
+
         mock_list.return_value = self.db_list2
 
         self.db_list2.sort()
 
         with gen_libs.no_std_out():
-            results = mysql_db_dump.set_db_list(self.server, self.args_array6)
+            results = mysql_db_dump.set_db_list(self.server, self.args)
 
         results.sort()
         self.assertEqual(results, self.db_list2)
@@ -177,10 +234,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array5
+
         mock_list.return_value = self.db_list
 
         self.db_list2.sort()
-        results = mysql_db_dump.set_db_list(self.server, self.args_array5)
+        results = mysql_db_dump.set_db_list(self.server, self.args)
         results.sort()
         self.assertEqual(results, self.db_list2)
 
@@ -197,10 +256,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array4
+
         mock_list.return_value = self.db_list
 
         self.db_list.sort()
-        results = mysql_db_dump.set_db_list(self.server, self.args_array4)
+        results = mysql_db_dump.set_db_list(self.server, self.args)
         results.sort()
         self.assertEqual(results, self.db_list)
 
@@ -217,10 +278,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array3
+
         mock_list.return_value = self.db_list
 
         self.db_list.sort()
-        results = mysql_db_dump.set_db_list(self.server, self.args_array3)
+        results = mysql_db_dump.set_db_list(self.server, self.args)
         results.sort()
         self.assertEqual(results, self.db_list)
 
@@ -237,10 +300,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array2
+
         mock_list.return_value = self.db_list
 
-        self.assertEqual(mysql_db_dump.set_db_list(
-            self.server, self.args_array2), self.results)
+        self.assertEqual(
+            mysql_db_dump.set_db_list(self.server, self.args), self.results)
 
     @mock.patch("mysql_db_dump.mysql_libs.fetch_db_dict",
                 mock.Mock(return_value=True))
@@ -255,10 +320,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array = self.args_array
+
         mock_list.return_value = self.db_list
 
-        self.assertEqual(mysql_db_dump.set_db_list(
-            self.server, self.args_array), self.results)
+        self.assertEqual(
+            mysql_db_dump.set_db_list(self.server, self.args), self.results)
 
 
 if __name__ == "__main__":
