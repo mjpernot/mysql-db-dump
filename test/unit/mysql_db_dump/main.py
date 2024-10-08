@@ -43,6 +43,7 @@ class ArgParser(object):
         arg_require
         get_val
         arg_xor_dict
+        arg_parse2
 
     """
 
@@ -69,6 +70,7 @@ class ArgParser(object):
         self.opt_con_or2 = True
         self.opt_xor_val = None
         self.opt_xor_val2 = True
+        self.argparse2 = True
 
     def arg_cond_req_or(self, opt_con_or):
 
@@ -166,6 +168,18 @@ class ArgParser(object):
 
         return self.opt_xor_val2
 
+    def arg_parse2(self):
+
+        """Method:  arg_parse2
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_parse2.
+
+        Arguments:
+
+        """
+
+        return self.argparse2
+
 
 class ProgramLock(object):
 
@@ -202,6 +216,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_arg_parse2_false
+        test_arg_parse2_true
         test_help_true
         test_help_false
         test_arg_require_false
@@ -234,6 +250,40 @@ class UnitTest(unittest.TestCase):
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
         self.args = ArgParser()
         self.args.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
+
+    @mock.patch("mysql_db_dump.gen_class.ArgParser")
+    def test_arg_parse2_false(self, mock_arg):
+
+        """Function:  test_arg_parse2_false
+
+        Description:  Test arg_parse2 returns false.
+
+        Arguments:
+
+        """
+
+        self.args.argparse2 = False
+
+        mock_arg.return_value = self.args
+
+        self.assertFalse(mysql_db_dump.main())
+
+    @mock.patch("mysql_db_dump.gen_libs.help_func")
+    @mock.patch("mysql_db_dump.gen_class.ArgParser")
+    def test_arg_parse2_true(self, mock_arg, mock_help):
+
+        """Function:  test_arg_parse2_true
+
+        Description:  Test arg_parse2 returns true.
+
+        Arguments:
+
+        """
+
+        mock_arg.return_value = self.args
+        mock_help.return_value = True
+
+        self.assertFalse(mysql_db_dump.main())
 
     @mock.patch("mysql_db_dump.gen_libs.help_func")
     @mock.patch("mysql_db_dump.gen_class.ArgParser")

@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.5.3] - 2024-09-27
+- Updated simplejson==3.13.2 for Python 3
+- Updated python-lib to v3.0.5
+- Updated mysql-lib to v5.3.7
+
+
+## [3.5.2] - 2024-09-09
+
+### Changed
+- config/mysql_cfg.py.TEMPLATE:  Changed cfg_file default value.
+- main: Removed parsing from gen_class.ArgParser call and called arg_parse2 as part of "if" statement.
+
+
+## [3.5.1] - 2024-02-29
+- Updated to work in Red Hat 8
+- Updated python-lib to v3.0.3
+- Updated mysql-lib to v5.3.4
+
+### Changed
+- main, dump_run: Removed gen_libs.get_inst call.
+- Set simplejson to 3.12.0 for Python 3.
+- Set chardet to 3.0.4 for Python 2.
+- Documentation updates.
+
+
 ## [3.5.0] - 2023-03-15
 - Replaced the use of arg_parser with gen_class.ArgParser class
 - Upgraded python-lib to v2.10.1

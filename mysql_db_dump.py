@@ -234,12 +234,11 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
 
     """
 
-    subp = gen_libs.get_inst(subprocess)
     dump_cmd = list(dump_cmd)
     e_file = kwargs.get("errfile", None)
 
     with io.open(dmp_file, "wb") as f_name:
-        proc1 = subp.Popen(dump_cmd, stdout=f_name, stderr=e_file)
+        proc1 = subprocess.Popen(dump_cmd, stdout=f_name, stderr=e_file)
         proc1.wait()
 
     if compress:
@@ -492,7 +491,6 @@ def main():
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
     dir_perms_chk = {"-d": 5, "-p": 5}
     dir_perms_crt = {"-o": 7}
     multi_val = ["-B", "-e", "-t"]
@@ -510,9 +508,10 @@ def main():
 
     # Process argument list from command line.
     args = gen_class.ArgParser(
-        cmdline.argv, opt_val=opt_val, multi_val=multi_val, do_parse=True)
+        sys.argv, opt_val=opt_val, multi_val=multi_val)
 
-    if not gen_libs.help_func(args, __version__, help_message)              \
+    if args.arg_parse2()                                                    \
+       and not gen_libs.help_func(args, __version__, help_message)          \
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
@@ -521,7 +520,7 @@ def main():
 
         try:
             prog_lock = gen_class.ProgramLock(
-                cmdline.argv, args.get_val("-y", def_val=""))
+                sys.argv, args.get_val("-y", def_val=""))
             run_program(args, opt_arg_list, opt_dump_list)
             del prog_lock
 
