@@ -36,6 +36,7 @@ class ArgParser(object):
         __init__
         arg_set_path
         get_args
+        arg_exist
 
     """
 
@@ -76,6 +77,18 @@ class ArgParser(object):
         """
 
         return self.args_array
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
 
 
 class Server(object):
