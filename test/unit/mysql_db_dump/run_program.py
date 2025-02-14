@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_db_dump
-import lib.gen_libs as gen_libs
-import version
+import mysql_db_dump                            # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class ArgParser(object):
+class ArgParser():
 
     """Class:  ArgParser
 
@@ -63,7 +63,7 @@ class ArgParser(object):
 
         """
 
-        return True if arg in self.args_array else False
+        return arg in self.args_array
 
     def get_val(self, skey, def_val=None):
 
@@ -78,7 +78,7 @@ class ArgParser(object):
         return self.args_array.get(skey, def_val)
 
 
-class Server(object):
+class Server():
 
     """Class:  Server
 
@@ -86,6 +86,8 @@ class Server(object):
 
     Methods:
         __init__
+        connect
+        set_srv_gtid
 
     """
 
@@ -129,8 +131,6 @@ class Server(object):
         Arguments:
 
         """
-
-        pass
 
 
 class UnitTest(unittest.TestCase):
@@ -215,8 +215,8 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
-    def test_ssl_fail(self, mock_inst, mock_cmd, mock_list, mock_ssl,
-                      mock_tls):
+    def test_ssl_fail(                                  # pylint:disable=R0913
+            self, mock_inst, mock_cmd, mock_list, mock_ssl, mock_tls):
 
         """Function:  test_ssl_fail
 
@@ -249,8 +249,8 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
-    def test_ssl_success(self, mock_inst, mock_cmd, mock_list, mock_ssl,
-                         mock_tls):
+    def test_ssl_success(                               # pylint:disable=R0913
+            self, mock_inst, mock_cmd, mock_list, mock_ssl, mock_tls):
 
         """Function:  test_ssl_success
 

@@ -27,30 +27,19 @@
 # Prerequisites:
 
   * List of Linux packages that need to be installed on the server.
-    - Centos 7 (Running Python 2.7):
-      -> python-pip
-    - Redhat 8 (Running Python 3.6):
-      -> python3-pip
+    - python3-pip
 
 
 # Installation:
 
 Install the project using git.
-  * From here on out, any reference to {Python_Project} or PYTHON_PROJECT replace with the baseline path of the python program.
 
 ```
 git clone git@sc.appdev.proj.coe.ic.gov:JAC-DSXD/mysql-db-dump.git
-cd mysql-db-dump
 ```
 
 Install/upgrade system modules.
 
-Centos 7 (Running Python 2.7):
-```
-sudo pip install -r requirements.txt --upgrade --trusted-host pypi.appdev.proj.coe.ic.gov
-```
-
-Redhat 8 (Running Python 3.6):
 NOTE: Install as the user that will run the program.
 
 ```
@@ -60,14 +49,6 @@ python -m pip install --user -r requirements3.txt --upgrade --trusted-host pypi.
 
 Install supporting classes and libraries.
 
-Centos 7 (Running Python 2.7):
-```
-pip install -r requirements-python-lib.txt --target lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
-```
-
-Redhat 8 (Running Python 3.6):
 ```
 python -m pip install -r requirements-python-lib.txt --target lib --trusted-host pypi.appdev.proj.coe.ic.gov
 python -m pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi.appdev.proj.coe.ic.gov
@@ -108,10 +89,9 @@ Make the appropriate change to the environment.
     - tls_versions = []
 
 ```
-cd config
-cp mysql_cfg.py.TEMPLATE mysql_cfg.py
-vim mysql_cfg.py
-chmod 600 mysql_cfg.py
+cp config/mysql_cfg.py.TEMPLATE config/mysql_cfg.py
+vim config/mysql_cfg.py
+chmod 600 config/mysql_cfg.py
 ```
 
 Create MySQL definition file.
@@ -122,9 +102,9 @@ Make the appropriate change to the environment.
     - socket=DIRECTORY_PATH/mysql.sock
 
 ```
-cp mysql.cfg.TEMPLATE mysql.cfg
-vim mysql.cfg
-chmod 600 mysql.cfg
+cp config/mysql.cfg.TEMPLATE config/mysql.cfg
+vim config/mysql.cfg
+chmod 600 config/mysql.cfg
 ```
 
 
@@ -133,7 +113,7 @@ chmod 600 mysql.cfg
   The program has a -h (Help option) that will show display an usage message.  The help message will usually consist of a description, usage, arugments to the program, example, notes about the program, and any known bugs not yet fixed.  To run the help command:
 
 ```
-{Python_Project}/mysql-db-dump/mysql_db_dump.py -h
+mysql_db_dump.py -h
 ```
 
 
@@ -148,13 +128,7 @@ Install the project using the procedures in the Installation section.
 ### Testing:
 
 ```
-cd {Python_Project}/mysql-db-dump
-test/unit/mysql_db_dump/unit_test_run3.sh
-```
-
-### Code coverage:
-```
-cd {Python_Project}/mysql-db-dump
+test/unit/mysql_db_dump/unit_test_run.sh
 test/unit/mysql_db_dump/code_coverage.sh
 ```
 

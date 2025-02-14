@@ -144,8 +144,6 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
-from __future__ import absolute_import
 
 # Standard
 import sys
@@ -162,19 +160,15 @@ try:
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.gen_libs as gen_libs
-    import lib.gen_class as gen_class
-    import mysql_lib.mysql_libs as mysql_libs
-    import mysql_lib.mysql_class as mysql_class
+    import lib.gen_libs as gen_libs                     # pylint:disable=R0402
+    import lib.gen_class as gen_class                   # pylint:disable=R0402
+    import mysql_lib.mysql_libs as mysql_libs           # pylint:disable=R0402
+    import mysql_lib.mysql_class as mysql_class         # pylint:disable=R0402
     import version
 
 __version__ = version.__version__
 
 # Global
-SSL_ARG_DICT = {
-    "ssl_client_ca": "--ssl-ca=", "ssl_ca_path": "--ssl-capath=",
-    "ssl_client_key": "--ssl-key=", "ssl_client_cert": "--ssl-cert=",
-    "ssl_mode": "--ssl-mode="}
 
 
 def help_message():
@@ -238,7 +232,8 @@ def dump_run(dump_cmd, dmp_file, compress, **kwargs):
     e_file = kwargs.get("errfile", None)
 
     with io.open(dmp_file, "wb") as f_name:
-        proc1 = subprocess.Popen(dump_cmd, stdout=f_name, stderr=e_file)
+        proc1 = subprocess.Popen(                       # pylint:disable=R1732
+            dump_cmd, stdout=f_name, stderr=e_file)
         proc1.wait()
 
     if compress:
@@ -270,7 +265,8 @@ def dump_db(dump_cmd, db_list, compress, dmp_path, **kwargs):
 
     if kwargs.get("err_sup", False):
         efile = gen_libs.crt_file_time("ErrOut", dmp_path, ".log")
-        errfile = open(efile, "a")
+        errfile = open(                                 # pylint:disable=R1732
+            efile, mode="a", encoding="UTF-8")
 
     if db_list:
         for item in db_list:
@@ -323,7 +319,7 @@ def set_db_list(server, args):
 
         # Difference of -B databases to database list.
         for item in set(args.get_val("-B")) - set(db_list):
-            print("Warning: Database(%s) does not exist." % (item))
+            print(f"Warning: Database {item} does not exist.")
 
         # Intersect of -B databases to database list.
         dump_list = list(set(args.get_val("-B")) & set(db_list))
@@ -350,7 +346,10 @@ def add_ssl(cfg, dump_cmd):
 
     """
 
-    global SSL_ARG_DICT
+    ssl_arg = {
+        "ssl_client_ca": "--ssl-ca=", "ssl_ca_path": "--ssl-capath=",
+        "ssl_client_key": "--ssl-key=", "ssl_client_cert": "--ssl-cert=",
+        "ssl_mode": "--ssl-mode="}
 
     dump_cmd = list(dump_cmd)
     status = True
@@ -362,8 +361,8 @@ def add_ssl(cfg, dump_cmd):
         if getattr(cfg, "ssl_client_ca") or (getattr(cfg, "ssl_client_key") and
                                              getattr(cfg, "ssl_client_cert")):
 
-            data = [SSL_ARG_DICT[opt] + getattr(cfg, opt)
-                    for opt in list(SSL_ARG_DICT.keys()) if getattr(cfg, opt)]
+            data = [ssl_arg[opt] + getattr(cfg, opt)
+                    for opt in list(ssl_arg.keys()) if getattr(cfg, opt)]
             dump_cmd.extend(data)
 
         else:
@@ -398,7 +397,8 @@ def add_tls(cfg, dump_cmd):
     return dump_cmd
 
 
-def run_program(args, opt_arg_list, opt_dump_list, **kwargs):
+def run_program(                                        # pylint:disable=R0914
+        args, opt_arg_list, opt_dump_list, **kwargs):
 
     """Function:  run_program
 
@@ -421,8 +421,9 @@ def run_program(args, opt_arg_list, opt_dump_list, **kwargs):
     server.connect(silent=True)
 
     if server.conn_msg:
-        print("run_program:  Error encountered on server(%s):  %s" %
-              (server.name, server.conn_msg))
+        print(
+            f"run_program:  Error encountered on server {server.name}:"
+            f" {server.conn_msg}")
 
     else:
         server.set_srv_gtid()
@@ -460,8 +461,7 @@ def run_program(args, opt_arg_list, opt_dump_list, **kwargs):
                     mail=mail, use_mailx=args.get_val("-u", def_val=False))
 
         else:
-            print("run_program:  Error encountered with SSL setup: %s" %
-                  (err_msg))
+            print(f"run_program:  Error encountered with SSL setup: {err_msg}")
 
         mysql_libs.disconnect(server)
 
@@ -525,8 +525,8 @@ def main():
             del prog_lock
 
         except gen_class.SingleInstanceException:
-            print("WARNING:  Lock in place for mysql_db_dump with id: %s"
-                  % (args.get_val("-y", def_val="")))
+            print(f'WARNING:  Lock in place for mysql_db_dump with id:'
+                  f' {args.get_val("-y", def_val="")}')
 
 
 if __name__ == "__main__":

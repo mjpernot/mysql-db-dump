@@ -20,13 +20,13 @@ import unittest
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_db_dump
-import version
+import mysql_db_dump                            # pylint:disable=E0401,C0413
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class CfgTest3(object):
+class CfgTest3():                                       # pylint:disable=R0903
 
     """Class:  CfgTest3
 
@@ -50,7 +50,7 @@ class CfgTest3(object):
         self.ssl_client_ca = None
 
 
-class CfgTest2(object):
+class CfgTest2():                                       # pylint:disable=R0903
 
     """Class:  CfgTest2
 
@@ -74,7 +74,7 @@ class CfgTest2(object):
         self.tls_versions = []
 
 
-class CfgTest(object):
+class CfgTest():                                        # pylint:disable=R0903
 
     """Class:  CfgTest
 
