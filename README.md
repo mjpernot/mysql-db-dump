@@ -90,8 +90,8 @@ Make the appropriate change to the environment.
 
 ```
 cp config/mysql_cfg.py.TEMPLATE config/mysql_cfg.py
-vim config/mysql_cfg.py
 chmod 600 config/mysql_cfg.py
+vim config/mysql_cfg.py
 ```
 
 Create MySQL definition file.
@@ -103,8 +103,8 @@ Make the appropriate change to the environment.
 
 ```
 cp config/mysql.cfg.TEMPLATE config/mysql.cfg
-vim config/mysql.cfg
 chmod 600 config/mysql.cfg
+vim config/mysql.cfg
 ```
 
 
