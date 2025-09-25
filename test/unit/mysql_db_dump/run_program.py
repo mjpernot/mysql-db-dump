@@ -215,7 +215,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
-    def test_ssl_fail(                                  # pylint:disable=R0913
+    def test_ssl_fail(                          # pylint:disable=R0913,R0917
             self, mock_inst, mock_cmd, mock_list, mock_ssl, mock_tls):
 
         """Function:  test_ssl_fail
@@ -249,7 +249,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_dump.set_db_list")
     @mock.patch("mysql_db_dump.crt_dump_cmd")
     @mock.patch("mysql_db_dump.mysql_libs.create_instance")
-    def test_ssl_success(                               # pylint:disable=R0913
+    def test_ssl_success(                       # pylint:disable=R0913,R0917
             self, mock_inst, mock_cmd, mock_list, mock_ssl, mock_tls):
 
         """Function:  test_ssl_success
