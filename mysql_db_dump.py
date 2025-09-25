@@ -119,10 +119,7 @@
             database configuration file.  See below for the defaults-extra-file
             format.
 
-        NOTE 3:  Ignore the entries for replication login as this template is
-            used for a variety of different MySQL programs.
-
-        NOTE 4:  May have to set host to "localhost" to use sockets properly
+        NOTE 3:  May have to set host to "localhost" to use sockets properly
             when using SSL connections.
 
         configuration modules -> name is runtime dependent as it can be
